@@ -1,8 +1,11 @@
 import { api } from "@/lib/api";
-import type { WsoOrder } from "@/types/wso";
-import type { WsoDetail } from "@/types/wsoDetail";
-import type { CreateCompleteWsoRequest } from "@/types/createWso";
-
+import type { WsoSummary } from "@/types/summary";
+import type {
+    WsoOrder,
+    WsoDetail,
+    CreateCompleteWsoRequest,
+    UpdateWsoRequest,
+} from "@/types/wso"
 export async function createWso(
     payload: CreateCompleteWsoRequest
 ): Promise<WsoDetail> {
@@ -25,3 +28,33 @@ export async function getWso(id: number): Promise<WsoDetail> {
 
     return response.data;
 }
+
+export async function updateWso(
+    id: number,
+    payload: UpdateWsoRequest
+) : Promise<WsoDetail> {
+
+    const response = await api.put(
+        `/wso/${id}`,
+        payload
+    );
+
+    return response.data;
+}
+
+export async function cancelWso(id: number) {
+    const response = await api.patch(
+        `/wso/${id}/cancel`
+    );
+
+    return response.data;
+}
+
+export async function getSummary(): Promise<WsoSummary> {
+    const response = await api.get(
+        "/wso/summary"
+    );
+
+    return response.data;
+}
+

@@ -1,12 +1,15 @@
 import { useParams } from "react-router-dom";
-
 import { useWso } from "@/hooks/usewso";
+import OrderInformationCard from "@/components/orders/OrderInformationCard";
+import ProductionSummaryCard from "@/components/orders/ProductionSummaryCard";
+import LineItemsTable from "@/components/orders/LineItemsTable";
+import { useCategories } from "@/hooks/useCategories";
 
 
 
 export default function WorkshopOrderDetail() {
     const { id } = useParams();
-
+    
     const orderId = Number(id);
 
     const {
@@ -14,6 +17,8 @@ export default function WorkshopOrderDetail() {
         isLoading,
         error,
     } = useWso(orderId);
+
+    const { data: categories } = useCategories();
 
     if (isLoading) {
         return <p>Loading order...</p>
@@ -23,31 +28,32 @@ export default function WorkshopOrderDetail() {
         return <p>Failed to load order.</p>
     }
 
-    if (!data) {
+    if(!data) {
         return <p>Order not found.</p>
     }
 
+    const categoryName = categories?.find(
+        (c) => c.id === data?.category_id
+    )?.name;
+
     return (
-        <div className="space-y-4">
-            <h1>{data.wso_number}</h1>
+        <div className="space-y-6">
 
-            <p>Status: {data.status}</p>
+            <OrderInformationCard
+                order={data}
+                categoryName={categoryName}
+            />
 
-            <p>Description: {data.description}</p>
+            <ProductionSummaryCard
+                order={data}
+            />
 
-            <p>Remarks: {data.remarks}</p>
+            <LineItemsTable
+                wsoId={data.id}
+                items={data.line_items}
+            />
 
-            <p>Items: {data.line_item_count}</p>
-
-            <p>Total: {data.total_quantity}</p>
-
-            {data.line_items.map((item) => (
-                <div key={item.id}>
-                    <p>
-                        {item.size} - {item.quantity}
-                    </p>
-                </div>
-            ))}
         </div>
-    )
+        
+    );
 }

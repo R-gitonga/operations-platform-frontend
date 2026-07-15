@@ -1,4 +1,4 @@
-import WsoForm from "@/components/wso/WsoForm";
+import WsoForm from "@/components/wso/CreateOrderForm";
 
 export default function CreateOrder() {
     return (
