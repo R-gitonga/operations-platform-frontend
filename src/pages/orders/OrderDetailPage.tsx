@@ -50,6 +50,7 @@ export default function WorkshopOrderDetail() {
 
             <LineItemsTable
                 wsoId={data.id}
+                wsoStatus={data.status}
                 items={data.line_items}
             />
 

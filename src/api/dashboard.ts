@@ -1,8 +1,9 @@
 import { api } from "@/lib/api"
-import type { WsoSummary } from "@/types/summary";
+import type { DashboardSummary } from "@/types/dashboard";
 
-export async function getSummary(): Promise<WsoSummary> {
-    const response = await api.get("/wso/summary");
+
+export async function getDashboard(): Promise<DashboardSummary> {
+    const response = await api.get<DashboardSummary>("/dashboard");
 
     return response.data;
 }

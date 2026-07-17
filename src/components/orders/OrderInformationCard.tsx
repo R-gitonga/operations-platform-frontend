@@ -11,6 +11,8 @@ import type { WsoDetail } from "@/types/wso";
 import EditORderDialog from "./EditOrderDialog";
 import CancelWsoDialog from "./CancelWsoDialog";
 import UploadAttachment from "./UploadAttachment";
+import EditOrderDialog from "./EditOrderDialog";
+import ReactivateWsoDialog from "./ReactivateWsoDialog";
 
 interface Props {
     order: WsoDetail;
@@ -41,6 +43,11 @@ export default function OrderInformationCard({
     order,
     categoryName,
 }: Props) {
+    const isCancelled =
+    order.status.toLowerCase() === "cancelled";
+
+const isCompleted =
+    order.status.toLowerCase() === "completed";
     return (
         <Card>
             <CardHeader>
@@ -52,24 +59,39 @@ export default function OrderInformationCard({
 
                         <div className="flex gap-2">
 
-                            <UploadAttachment
-                                wsoId={order.id}
-                            />
+    {!isCancelled && !isCompleted && (
+    <>
+        <UploadAttachment
+            wsoId={order.id}
+        />
 
-                            <EditORderDialog order={order}/>
+        <EditOrderDialog
+            order={order}
+        />
 
+        <CancelWsoDialog
+            id={order.id}
+            trigger={
+                <Button variant="destructive">
+                    Cancel
+                </Button>
+            }
+        />
+    </>
+)}
 
-                            {order.status !== "Cancelled" && (
-                                <CancelWsoDialog
-                                    id={order.id}
-                                    trigger={
-                                        <Button variant="destructive" >
-                                            Cancel
-                                        </Button>
-                                    }
-                                />
-                            )}
-                        </div>
+    {isCancelled && (
+        <ReactivateWsoDialog
+            id={order.id}
+            trigger={
+                <Button>
+                    Reactivate
+                </Button>
+            }
+        />
+    )}
+
+</div>
 
                     </div>
                 </CardTitle>

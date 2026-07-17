@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import type { WsoSummary } from "@/types/summary";
+// import type { DashboardSummary } from "@/types/dashboard";
 import type {
     WsoOrder,
     WsoDetail,
@@ -50,11 +50,11 @@ export async function cancelWso(id: number) {
     return response.data;
 }
 
-export async function getSummary(): Promise<WsoSummary> {
-    const response = await api.get(
-        "/wso/summary"
-    );
+// export async function getSummary(): Promise<WsoSummary> {
+//     const response = await api.get(
+//         "/wso/summary"
+//     );
 
-    return response.data;
-}
+//     return response.data;
+// }
 

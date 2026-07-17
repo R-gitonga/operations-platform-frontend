@@ -8,17 +8,22 @@ export function useCancelWso() {
     return useMutation({
         mutationFn: (id: number) => cancelWso(id),
 
-        onSuccess: () => {
-            queryClient.invalidateQueries({
+        onSuccess: async (_, id) => {
+
+            await queryClient.invalidateQueries({
                 queryKey: ["wsos"],
             });
 
-            queryClient.invalidateQueries({
-                queryKey: ["wso"],
+            await queryClient.invalidateQueries({
+                queryKey: ["summary"],
             });
 
-            queryClient.invalidateQueries({
-                queryKey: ["summary"],
+            await queryClient.invalidateQueries({
+                queryKey: ["wso", id],
+            });
+
+            await queryClient.refetchQueries({
+                queryKey: ["wso", id],
             });
         },
     });
