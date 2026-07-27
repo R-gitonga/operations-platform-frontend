@@ -1,4 +1,9 @@
-import { LayoutDashboard, ClipboardList, FilePlus2, } from "lucide-react";
+import {
+    LayoutDashboard,
+    ClipboardList,
+    FilePlus2,
+    Settings,
+} from "lucide-react";
 
 export const navigation = [
     {
@@ -15,5 +20,10 @@ export const navigation = [
         title: "New Workshop Order",
         url: "/orders/new",
         icon: FilePlus2,
+    },
+    {
+        title: "Settings",
+        url: "/settings",
+        icon: Settings,
     },
 ];

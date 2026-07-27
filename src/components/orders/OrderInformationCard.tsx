@@ -133,10 +133,10 @@ const isCompleted =
                     value={order.fabric_code}
                 />
 
-                <DetailRow
+                {/* <DetailRow
                     label="Remarks"
                     value={order.remarks}
-                />
+                /> */}
 
                 <DetailRow
                     label="Attachment"

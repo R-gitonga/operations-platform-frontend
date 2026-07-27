@@ -3,25 +3,22 @@ import type { CreateWsoLineItemRequest, WsoLineItem } from "./lineItem";
 export interface WsoOrder {
     id: number;
     category_id: number | null;
-
     date_signed: string | null;
-
     wso_number: string;
-
     req_number: string | null;
-
     description: string | null;
-
     design_code: string | null;
-
     fabric_code: string | null;
-
     remarks: string | null;
-
-    attachment_name: String | null;
-    attachment_path: String | null;
-
+    attachment_name: string | null;
+    attachment_path: string | null;
     status: string;
+    current_stage_id: number | null;
+    current_stage_name: string | null;
+    current_stage_color: string | null;
+    current_stage_changed_by: string | null;
+    current_stage_changed_at: string | null;
+    current_stage_notes: string | null;
 }
 
 export interface WsoDetail extends WsoOrder {

@@ -4,8 +4,7 @@ import OrderInformationCard from "@/components/orders/OrderInformationCard";
 import ProductionSummaryCard from "@/components/orders/ProductionSummaryCard";
 import LineItemsTable from "@/components/orders/LineItemsTable";
 import { useCategories } from "@/hooks/useCategories";
-
-
+import ProductionTimelineCard from "@/components/orders/ProductionTimeLineCard";
 
 export default function WorkshopOrderDetail() {
     const { id } = useParams();
@@ -46,6 +45,10 @@ export default function WorkshopOrderDetail() {
 
             <ProductionSummaryCard
                 order={data}
+            />
+
+            <ProductionTimelineCard
+                wsoId={data.id}
             />
 
             <LineItemsTable

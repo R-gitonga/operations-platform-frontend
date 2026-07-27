@@ -1,3 +1,3 @@
-<DetailRow
+{/* <DetailRow
     label="Design Code"
-    value={order.design_code} />
+    value={order.design_code} /> */}

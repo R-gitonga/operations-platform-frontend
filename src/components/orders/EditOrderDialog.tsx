@@ -51,7 +51,7 @@ export default function EditOrderDialog({
             description: form.description || undefined,
             design_code: form.design_code || undefined,
             fabric_code: form.fabric_code || undefined,
-            remarks: form.remarks || undefined,
+            // remarks: form.remarks || undefined,
         };
 
         updateMutation.mutate(

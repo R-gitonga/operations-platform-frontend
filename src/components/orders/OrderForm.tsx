@@ -168,7 +168,7 @@ export default function OrderForm({
                 />
             </div>
 
-            <div className="mt-6">
+            {/* <div className="mt-6">
                 <Label>Remarks</Label>
 
                 <Textarea
@@ -181,7 +181,7 @@ export default function OrderForm({
                         })
                     }
                 />
-            </div>
+            </div> */}
         </div>
     );
 }
