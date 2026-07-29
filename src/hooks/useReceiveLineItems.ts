@@ -21,11 +21,11 @@ export function useReceiveLineItem() {
 
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["wsos"],
+                queryKey: ["wso"],
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["wso"],
+                queryKey: ["wsos"],
             });
         },
     });

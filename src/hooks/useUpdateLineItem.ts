@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateLineItem } from "@/api/lineItem";
 
 export function useUpdateLineItem() {
-    const queryCLient = useQueryClient();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: ({
@@ -11,16 +11,12 @@ export function useUpdateLineItem() {
             payload,
         }: any) => updateLineItem(id, payload),
 
-        onSuccess: (_, variables) => {
-            queryCLient.invalidateQueries({
-                queryKey: ["wso",]
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["wso"],
             });
 
-            queryCLient.invalidateQueries({
-                queryKey: ["wso", variables.id],
-            });
-
-            queryCLient.invalidateQueries({
+            queryClient.invalidateQueries({
                 queryKey: ["wsos"],
             });
         },

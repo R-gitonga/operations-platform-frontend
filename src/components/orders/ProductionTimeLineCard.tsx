@@ -5,20 +5,20 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { useStageHistory } from "@/hooks/useStageHistory";
+import { useProductionItemStageHistory  } from "@/hooks/useProductionItemStageHistory";
 
 interface Props {
-    wsoId: number;
+    wsoItemId: number;
 }
 
 export default function ProductionTimelineCard({
-    wsoId,
+    wsoItemId,
 }: Props) {
 
     const {
         data: history = [],
         isLoading,
-    } = useStageHistory(wsoId);
+    } = useProductionItemStageHistory (wsoItemId);
 
     return (
 

@@ -9,12 +9,13 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-import type { WsoDetail } from "@/types/wso";
+import type { WsoItemDetail } from "@/types/wso";
 
 import ChangeStageDialog from "./ChangeStageDialog";
 
 interface Props {
-    order: WsoDetail;
+    wsoId: number;
+    item: WsoItemDetail;
 }
 
 function SummaryRow({
@@ -74,8 +75,9 @@ function formatDate(value?: string | null) {
 
 }
 
-export default function ProductionSummaryCard({
-    order,
+export default function ProductionItemSummaryCard({
+    wsoId,
+    item,
 }: Props) {
 
     const [dialogOpen, setDialogOpen] =
@@ -113,12 +115,12 @@ export default function ProductionSummaryCard({
                             className="inline-flex rounded-full px-4 py-2 text-sm font-semibold text-white"
                             style={{
                                 backgroundColor:
-                                    order.current_stage_color ??
+                                    item.current_stage_color ??
                                     "#6b7280",
                             }}
                         >
                             {
-                                order.current_stage_name ??
+                                item.current_stage_name ??
                                 "Not Started"
                             }
                         </span>
@@ -127,41 +129,41 @@ export default function ProductionSummaryCard({
 
                     <DetailRow
                         label="Last Updated By"
-                        value={order.current_stage_changed_by}
+                        value={item.current_stage_changed_by}
                     />
 
                     <DetailRow
                         label="Last Updated"
                         value={formatDate(
-                            order.current_stage_changed_at,
+                            item.current_stage_changed_at,
                         )}
                     />
 
                     <DetailRow
                         label="Latest Notes"
-                        value={order.current_stage_notes}
+                        value={item.current_stage_notes}
                     />
 
                     <div className="pt-2">
 
                         <SummaryRow
                             label="Line Items"
-                            value={order.line_item_count}
+                            value={item.line_items.length}
                         />
 
                         <SummaryRow
                             label="Qty Raised"
-                            value={order.total_qty_raised}
+                            value={item.total_qty_raised}
                         />
 
                         <SummaryRow
                             label="Qty Received"
-                            value={order.total_qty_received}
+                            value={item.total_qty_received}
                         />
 
                         <SummaryRow
                             label="Balance"
-                            value={order.total_balance}
+                            value={item.total_balance}
                         />
 
                     </div>
@@ -173,8 +175,9 @@ export default function ProductionSummaryCard({
             <ChangeStageDialog
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
-                wsoId={order.id}
-                currentStageId={order.current_stage_id}
+                wsoId={wsoId}
+                wsoItemId={item.id}
+                currentStageId={item.current_stage_id}
             />
 
         </>

@@ -1,112 +1,183 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState, type FormEvent } from "react";
+
 import { Button } from "../ui/button";
 
 import { useCategories } from "@/hooks/useCategories";
 import { useCreateWso } from "@/hooks/useCreateWso";
 
-import OrderForm from "../orders/OrderForm";
+import WsoHeaderForm from "./WsoHeaderForm";
+import ProductionItemForm from "./ProductionItemForm";
 import LineItemsForm from "../orders/LineItemsForm";
 
-import type { OrderFormData } from "@/types/orderForm";
 import type { CreateCompleteWsoRequest } from "@/types/wso";
-import { useEffect } from "react";
-
+import type { WsoHeaderFormData } from "@/types/wsoHeaderForm";
+import type { ProductionItemFormData } from "@/types/productionItemForm";
 
 export default function WsoForm() {
     const navigate = useNavigate();
 
     const { data: categories } = useCategories();
 
-    // const [categories, setCategories] = useState(fetchedCategories);
-
     const createMutation = useCreateWso();
 
-    const [form, setForm] = useState<OrderFormData>({
-        category_id: undefined,
+    const [header, setHeader] = useState<WsoHeaderFormData>({
         date_signed: "",
         wso_number: "",
         req_number: "",
-        description: "",
-        design_code: "",
-        fabric_code: "",
-        remarks: "",
-
-        line_items: [
-            {
-                size: "",
-                qty_raised: 0,
-            },
-        ],
     });
 
+    const [items, setItems] = useState<ProductionItemFormData[]>([
+        {
+            category_id: undefined,
+            description: "",
+            design_code: "",
+            fabric_code: "",
+            branding_required: false,
+            branding_completed: false,
+            line_items: [
+                {
+                    size: "",
+                    qty_raised: 0,
+                },
+            ],
+        },
+    ]);
 
+    function updateItem(index: number, updatedItem: ProductionItemFormData) {
+        const copy = [...items];
+        copy[index] = updatedItem;
+        setItems(copy);
+    }
 
-function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    function addProductionItem() {
+        setItems([
+            ...items,
+            {
+                category_id: undefined,
+                description: "",
+                design_code: "",
+                fabric_code: "",
+                branding_required: false,
+                branding_completed: false,
+                line_items: [
+                    {
+                        size: "",
+                        qty_raised: 0,
+                    },
+                ],
+            },
+        ]);
+    }
+
+    function removeProductionItem(index: number) {
+        setItems(items.filter((_, i) => i !== index));
+    }
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const payload: CreateCompleteWsoRequest = {
-        category_id: form.category_id,
-        date_signed: form.date_signed || undefined,
-        wso_number: form.wso_number,
-        req_number: form.req_number || undefined,
-        description: form.description || undefined,
-        design_code: form.design_code || undefined,
-        fabric_code: form.fabric_code || undefined,
-        remarks: form.remarks || undefined,
+            date_signed: header.date_signed || undefined,
+            wso_number: header.wso_number,
+            req_number: header.req_number || undefined,
 
-        line_items:
-            form.line_items.map(item => ({
-                size: item.size,
-                qty_raised: item.qty_raised,
+            items: items.map((item) => ({
+                category_id: item.category_id!,
+                description: item.description,
+                design_code: item.design_code,
+                fabric_code: item.fabric_code,
+                branding_required: item.branding_required,
+                branding_completed: item.branding_completed,
+                line_items: item.line_items,
             })),
-    };
+        };
 
-createMutation.mutate(payload, {
-    onSuccess: () => {
-        navigate("/orders");
-    },
+        createMutation.mutate(payload, {
+            onSuccess: () => {
+                navigate("/orders");
+            },
 
-    onError: (error) => {
-        console.error(error);
-        alert("Failed to create a Workshop Order.");
-        }
-    });
-}
+            onError: (err) => {
+                console.error(err);
+                alert("Failed to create Workshop Order.");
+            },
+        });
+    }
 
     return (
-
         <form
             className="space-y-8"
             onSubmit={handleSubmit}
         >
-            <OrderForm
-                form={form}
-                setForm={setForm}
-                categories={categories ?? []}
-                
+            <WsoHeaderForm
+                header={header}
+                setHeader={setHeader}
             />
 
-            <LineItemsForm
-                form={form}
-                setForm={setForm}
-            />
+            {items.map((item, index) => (
+                <div
+                    key={index}
+                    className="space-y-4 rounded-lg border p-4"
+                >
+                    <div className="flex items-center justify-between">
+
+                        <h2 className="text-lg font-semibold">
+                            Production Item {index + 1}
+                        </h2>
+
+                        {items.length > 1 && (
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                onClick={() =>
+                                    removeProductionItem(index)
+                                }
+                            >
+                                Remove
+                            </Button>
+                        )}
+
+                    </div>
+
+                    <ProductionItemForm
+                        item={item}
+                        onChange={(updated) =>
+                            updateItem(index, updated)
+                        }
+                        categories={categories ?? []}
+                    />
+
+                    <LineItemsForm
+                        item={item}
+                        onChange={(updated) =>
+                            updateItem(index, updated)
+                        }
+                    />
+                </div>
+            ))}
+
+            <Button
+                type="button"
+                variant="outline"
+                onClick={addProductionItem}
+            >
+                + Add Production Item
+            </Button>
 
             <div className="flex justify-end">
 
-                <Button 
+                <Button
                     type="submit"
                     disabled={createMutation.isPending}
-                    >
-                        {createMutation.isPending
-                            ? "Creating..."
-                            : "Create WSO"}
+                >
+                    {createMutation.isPending
+                        ? "Creating..."
+                        : "Create WSO"}
                 </Button>
 
             </div>
 
         </form>
-       
     );
 }

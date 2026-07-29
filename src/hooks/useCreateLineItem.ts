@@ -7,20 +7,26 @@ export function useCreateLineItem() {
 
     return useMutation({
         mutationFn: ({
-            wsoId,
+            wsoItemId,
             payload,
-        }: any) =>
-            createLineItem(wsoId, payload),
+        }: {
+            wsoItemId: number;
+            payload: any;
+        }) =>
+            createLineItem(wsoItemId, payload),
 
-            onSuccess: (_, variables) => {
-                queryClient.invalidateQueries({
-                    queryKey: ["wso", variables.wsoId],
-                });
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ["wso"],
+            });
 
-                queryClient.invalidateQueries({
-                    queryKey: ["wsos"],
-                });
-            },
+            queryClient.invalidateQueries({
+                queryKey: ["wso", variables.wsoItemId],
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ["wsos"],
+            });
+        },
     });
 }
-

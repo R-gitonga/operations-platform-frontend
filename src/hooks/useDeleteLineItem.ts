@@ -10,11 +10,11 @@ export function useDeleteLineItem() {
 
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["wsos"],
+                queryKey: ["wso"],
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["wso"],
+                queryKey: ["wsos"],
             });
         },
     });

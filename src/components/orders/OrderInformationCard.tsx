@@ -8,15 +8,14 @@ import {
 import { Button } from "../ui/button";
 
 import type { WsoDetail } from "@/types/wso";
-import EditORderDialog from "./EditOrderDialog";
+import EditORderDialog from "./EditWsoDialog";
 import CancelWsoDialog from "./CancelWsoDialog";
 import UploadAttachment from "./UploadAttachment";
-import EditOrderDialog from "./EditOrderDialog";
+import EditOrderDialog from "./EditWsoDialog";
 import ReactivateWsoDialog from "./ReactivateWsoDialog";
 
 interface Props {
     order: WsoDetail;
-    categoryName?: string;
 }
 
 function DetailRow({
@@ -41,7 +40,6 @@ function DetailRow({
 
 export default function OrderInformationCard({
     order,
-    categoryName,
 }: Props) {
     const isCancelled =
     order.status.toLowerCase() === "cancelled";
@@ -98,10 +96,7 @@ const isCompleted =
             </CardHeader>
 
             <CardContent>
-                <DetailRow
-                    label="Category"
-                    value={categoryName}
-                />
+           
 
                 <DetailRow
                     label="Date Signed"
@@ -117,26 +112,6 @@ const isCompleted =
                     label="REQ Number"
                     value={order.req_number}
                 />
-
-                <DetailRow
-                    label="Description"
-                    value={order.description}
-                />
-
-                <DetailRow
-                    label="Design Code"
-                    value={order.design_code}
-                />
-
-                <DetailRow
-                    label="Fabric Code"
-                    value={order.fabric_code}
-                />
-
-                {/* <DetailRow
-                    label="Remarks"
-                    value={order.remarks}
-                /> */}
 
                 <DetailRow
                     label="Attachment"

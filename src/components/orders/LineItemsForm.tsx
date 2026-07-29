@@ -1,113 +1,161 @@
-import type { OrderFormData } from "@/types/orderForm";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
+import type { ProductionItemFormData } from "@/types/productionItemForm";
+
 interface LineItemsFormProps {
-    form: OrderFormData;
+    item: ProductionItemFormData;
 
-    setForm: React.Dispatch<
-        React.SetStateAction<OrderFormData>
-    >;
+    onChange: (
+        item: ProductionItemFormData
+    ) => void;
 }
-
-
 
 export default function LineItemsForm({
-    
-    form,
-    setForm,
+    item,
+    onChange,
 }: LineItemsFormProps) {
+
     function addLineItem() {
-    setForm({
-        ...form,
-        line_items: [
-            ...(form.line_items ?? []),
-            {
-                size: "",
-                qty_raised: 0,
-            },
-        ],
-    });
-}
+        onChange({
+            ...item,
+            line_items: [
+                ...item.line_items,
+                {
+                    size: "",
+                    qty_raised: 0,
+                },
+            ],
+        });
+    }
+
+    function updateSize(
+        index: number,
+        value: string,
+    ) {
+        const updated = [...item.line_items];
+
+        updated[index] = {
+            ...updated[index],
+            size: value,
+        };
+
+        onChange({
+            ...item,
+            line_items: updated,
+        });
+    }
+
+    function updateQtyRaised(
+        index: number,
+        value: number,
+    ) {
+        const updated = [...item.line_items];
+
+        updated[index] = {
+            ...updated[index],
+            qty_raised: value,
+        };
+
+        onChange({
+            ...item,
+            line_items: updated,
+        });
+    }
+
+    function removeLineItem(
+        index: number,
+    ) {
+        onChange({
+            ...item,
+            line_items: item.line_items.filter(
+                (_, i) => i !== index
+            ),
+        });
+    }
+
     return (
-    <div className="rounded-lg border bg-white p-6 shadow-sm">
-                    <h2 className="mb-4 text-xl font-semibold">
-                        Line Items
-                    </h2>
+        <div className="rounded-lg border bg-white p-6 shadow-sm">
 
-                    <div className="space-y-4">
-                        {(form.line_items ?? []).map((item, index) => (
-                            <div key={index} className="grid grid-cols-[1fr_1fr_auto] gap-4 items-end">
-                                <div className="space-y-2">
-                                    <Label>Size</Label>
+            <h2 className="mb-4 text-xl font-semibold">
+                Sizes
+            </h2>
 
-                                    <Input
-                                        value={item.size}
-                                        onChange={(e) => {
-                                            const updated = [...(form.line_items ?? [])];
-                                            updated[index].size = e.target.value;
+            <div className="space-y-4">
 
-                                            setForm({
-                                                ...form,
-                                                line_items: updated,
-                                            });
-                                        }}
-                                    />
-                                </div>
+                {item.line_items.map((lineItem, index) => (
 
-                                <div className="space-y-2">
-                                    <Label>Qty Raised</Label>
+                    <div
+                        key={index}
+                        className="grid grid-cols-[1fr_1fr_auto] gap-4 items-end"
+                    >
 
-                                    <Input
-                                        type="number"
-                                        value={item.qty_raised}
-                                        onChange={(e) => {
-                                            const updated = [...(form.line_items ?? [])];
-                                            updated[index].qty_raised = Number(e.target.value);
+                        <div>
 
-                                            setForm({
-                                                ...form,
-                                                line_items: updated,
-                                            });
-                                        }}
-                                    />
-                                </div>
+                            <Label>Size</Label>
 
-                                <div>
-                                    {(form.line_items ?? []).length > 1 && (
+                            <Input
+                                value={lineItem.size}
+                                onChange={(e) =>
+                                    updateSize(
+                                        index,
+                                        e.target.value
+                                    )
+                                }
+                            />
 
-                                        <Button
-                                            type="button"
-                                            variant="destructive"
-                                            onClick={() =>
-                                                setForm({
-                                                    ...form,
-                                                    line_items: (form.line_items ?? []).filter(
-                                                        (_, i) => i !== index
-                                                    ),
-                                                })
-                                            }
-                                        >
-                                            Remove
-                                        </Button>
-                                    )}
+                        </div>
 
-                                </div>
+                        <div>
 
-                            </div>
-                        ))}
+                            <Label>Qty Raised</Label>
 
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={addLineItem}
-                        >
-                            + Add Line Item
-                        </Button>
+                            <Input
+                                type="number"
+                                value={lineItem.qty_raised}
+                                onChange={(e) =>
+                                    updateQtyRaised(
+                                        index,
+                                        Number(e.target.value)
+                                    )
+                                }
+                            />
+
+                        </div>
+
+                        <div>
+
+                            {item.line_items.length > 1 && (
+
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    onClick={() =>
+                                        removeLineItem(index)
+                                    }
+                                >
+                                    Remove
+                                </Button>
+
+                            )}
+
+                        </div>
 
                     </div>
 
-                </div>
-)
+                ))}
+
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addLineItem}
+                >
+                    + Add Size
+                </Button>
+
+            </div>
+
+        </div>
+    );
 }

@@ -16,23 +16,23 @@ export async function getProductionStages(): Promise<ProductionStage[]> {
 }
 
 export async function getStageHistory(
-    wsoId: number,
+    wsoItemId: number,
 ): Promise<StageHistory[]> {
 
     const response = await api.get<StageHistory[]>(
-        `/wso/${wsoId}/stage-history`
+        `/wso-items/${wsoItemId}/stage-history`
     );
 
     return response.data;
 }
 
 export async function updateProductionStage(
-    wsoId: number,
+    wsoItemId: number,
     payload: UpdateProductionStageRequest,
 ) {
 
     const response = await api.post(
-        `/wso/${wsoId}/stage`,
+        `/wso-items/${wsoItemId}/stage`,
         payload,
     );
 

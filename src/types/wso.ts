@@ -1,28 +1,81 @@
-import type { CreateWsoLineItemRequest, WsoLineItem } from "./lineItem";
+import type {
+    CreateWsoLineItemRequest,
+    WsoLineItem,
+} from "./lineItem";
+import type { ProductionItemFormData } from "./productionItemForm";
 
 export interface WsoOrder {
     id: number;
-    category_id: number | null;
+
     date_signed: string | null;
+
     wso_number: string;
+
     req_number: string | null;
-    description: string | null;
-    design_code: string | null;
-    fabric_code: string | null;
-    remarks: string | null;
+
     attachment_name: string | null;
+
     attachment_path: string | null;
+
     status: string;
-    current_stage_id: number | null;
-    current_stage_name: string | null;
-    current_stage_color: string | null;
-    current_stage_changed_by: string | null;
-    current_stage_changed_at: string | null;
-    current_stage_notes: string | null;
+
+    created_at?: string | null;
+
+    updated_at?: string | null;
 }
 
-export interface WsoDetail extends WsoOrder {
-    line_item_count: number;
+export interface WsoDetail {
+    id: number;
+
+    date_signed: string | null;
+
+    wso_number: string;
+
+    req_number: string | null;
+
+    attachment_name: string | null;
+
+    attachment_path: string | null;
+
+    status: string;
+
+    total_items: number;
+
+    total_qty_raised: number;
+
+    total_qty_received: number;
+
+    total_balance: number;
+
+    items: WsoItemDetail[];
+}
+
+export interface WsoItemDetail {
+    id: number;
+
+    category_id: number | null;
+
+    description: string | null;
+
+    design_code: string | null;
+
+    fabric_code: string | null;
+
+    branding_required: boolean;
+
+    branding_completed: boolean;
+
+    current_stage_id: number | null;
+
+    current_stage_name: string | null;
+
+    current_stage_color: string | null;
+
+    current_stage_changed_by: string | null;
+
+    current_stage_changed_at: string | null;
+
+    current_stage_notes: string | null;
 
     total_qty_raised: number;
 
@@ -33,48 +86,35 @@ export interface WsoDetail extends WsoOrder {
     line_items: WsoLineItem[];
 }
 
-export interface CreateCompleteWsoRequest {
-    category_id?: number;
 
+export interface CreateCompleteWsoRequest {
     date_signed?: string;
 
     wso_number: string;
 
     req_number?: string;
 
-    description?: string;
-
-    design_code?: string;
-
-    fabric_code?: string;
-
-    remarks?: string;
-
-    line_items: CreateWsoLineItemRequest[];
+    items: ProductionItemFormData[];
 }
 
 export interface UpdateWsoRequest {
-    category_id?: number;
-
     date_signed?: string;
 
     wso_number?: string;
 
     req_number?: string;
 
-    description?: string;
-
-    design_code?: string;
-
-    fabric_code?: string;
-
-    remarks?: string;
-
     status?: string;
 }
 
 export interface WsoSummary {
     total_orders: number;
+
     status_counts: Record<string, number>;
-    total_quantity: number;
+
+    total_qty_raised: number;
+
+    total_qty_received: number;
+
+    total_balance: number;
 }

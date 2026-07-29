@@ -20,12 +20,12 @@ import type {
 import type { ReactNode } from "react";
 
 interface AddLineItemDialogProps {
-    wsoId: number;
-    trigger?: ReactNode
+    wsoItemId: number;
+    trigger?: ReactNode;
 }
 
 export default function AddLineItemDialog({
-    wsoId,
+    wsoItemId,
     trigger,
 }: AddLineItemDialogProps) {
     const [open, setOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function AddLineItemDialog({
 
         mutation.mutate(
             {
-                wsoId,
+                wsoItemId,
                 payload,
             },
             {

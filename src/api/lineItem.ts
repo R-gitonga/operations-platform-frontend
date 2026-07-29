@@ -8,12 +8,12 @@ import type {
 } from "@/types/lineItem";
 
 export async function createLineItem(
-    wsoId: number,
-    payload: CreateWsoLineItemRequest
-): Promise<WsoLineItem> {
+    wsoItemId: number,
+    payload: CreateWsoLineItemRequest,
+) {
     const response = await api.post(
-        `/wso/${wsoId}/line-items`,
-        payload
+        `/wso-items/${wsoItemId}/line-items`,
+        payload,
     );
 
     return response.data;

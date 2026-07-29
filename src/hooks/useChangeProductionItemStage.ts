@@ -11,10 +11,10 @@ import type {
     UpdateProductionStageRequest,
 } from "@/types/production";
 
-export function useChangeStage(
+export function useChangeProductionItemStage(
     wsoId: number,
+    productionItemId: number,
 ) {
-
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -23,7 +23,7 @@ export function useChangeStage(
             payload: UpdateProductionStageRequest,
         ) =>
             updateProductionStage(
-                wsoId,
+                productionItemId,
                 payload,
             ),
 
@@ -38,11 +38,13 @@ export function useChangeStage(
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["stage-history", wsoId],
+                queryKey: [
+                    "production-stage-history",
+                    productionItemId,
+                ],
             });
 
         },
 
     });
-
 }

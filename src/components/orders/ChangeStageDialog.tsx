@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 
 import { useProductionStages } from "@/hooks/useProductionStages";
-import { useChangeStage } from "@/hooks/useChangeStage";
+import { useChangeProductionItemStage } from "@/hooks/useChangeProductionItemStage";
 
 interface Props {
 
@@ -41,6 +41,8 @@ interface Props {
     onOpenChange: (open: boolean) => void;
 
     wsoId: number;
+
+    wsoItemId: number;
 
     currentStageId: number | null;
 }
@@ -53,6 +55,8 @@ export default function ChangeStageDialog({
 
     wsoId,
 
+    wsoItemId,
+
     currentStageId,
 
 }: Props) {
@@ -61,7 +65,7 @@ export default function ChangeStageDialog({
         useProductionStages();
 
     const mutation =
-        useChangeStage(wsoId);
+        useChangeProductionItemStage(wsoId, wsoItemId);
 
     const [stageId, setStageId] =
         useState("");
