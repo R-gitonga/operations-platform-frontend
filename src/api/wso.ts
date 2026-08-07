@@ -75,7 +75,7 @@ export async function updateWso(
 export async function cancelWso(
     id: number,
 ) {
-    return api.post(`/wso/${id}/cancel`);
+    return api.patch(`/wso/${id}/cancel`);
 }
 
 export async function reactivateWso(

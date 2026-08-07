@@ -197,9 +197,6 @@ export default function OrdersPage() {
                                         WSO Number
                                     </th>
 
-                                    <th className="text-left py-3">
-                                        Description
-                                    </th>
 
                                     <th className="text-left py-3">
                                         Status
@@ -232,12 +229,6 @@ export default function OrdersPage() {
                                         <td className="py-4 font-medium">
 
                                             {order.wso_number}
-
-                                        </td>
-
-                                        <td>
-
-                                            {order.description}
 
                                         </td>
 

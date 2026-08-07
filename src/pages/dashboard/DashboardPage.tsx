@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
   ClipboardList,
-  Clock3,
   CheckCircle2,
   Ban,
   Package,
@@ -11,29 +10,30 @@ import {
 } from "lucide-react";
 
 import { useDashboard } from "@/hooks/useDashboard";
+import { useAttentionRequired } from "@/hooks/useAttentionRequired";
 
 import KpiCard from "@/components/dashboard/KpiCard";
 import DashboardSection from "@/components/dashboard/DashboardSection";
-import StatusBadge from "@/components/dashboard/StatusBadge";
+import ProductionStageCards from "@/components/dashboard/ProductionStageCards";
+import ProgressStat from "@/components/dashboard/ProgressStat";
+import AttentionRequired from "@/components/dashboard/AttentionRequired";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ProgressStat from "@/components/dashboard/ProgressStat";
-
-import OrderStatusChart from "@/components/dashboard/OrderStatusChart";
-import LargestOutstandingChart from "@/components/dashboard/LargestOutstandingChart";
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useDashboard();
 
-  if (isLoading) {
-    return <p>Loading Dashboard...</p>;
-  }
+  const {
+    data: attentionItems,
+    isLoading: attentionLoading,
+    error: attentionError,
+  } = useAttentionRequired();
 
-  if (error || !data) {
-    return <p>Failed to load Dashboard.</p>;
-  }
+  if (isLoading) return <p>Loading Dashboard...</p>;
+
+  if (error || !data) return <p>Failed to load Dashboard.</p>;
 
   return (
     <div className="space-y-10">
@@ -43,15 +43,13 @@ export default function Dashboard() {
         <p className="text-slate-500">Workshop Operations Overview</p>
       </div>
 
-      {/* ==================
-                production overview
-             ======================*/}
+      {/* ========================================= */}
 
       <DashboardSection title="Production Overview">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <KpiCard
             title="Total Orders"
-            value={data.total_orders}
+            value={data.orders.total}
             icon={ClipboardList}
             color="text-slate-600"
             onClick={() => navigate("/orders")}
@@ -59,23 +57,15 @@ export default function Dashboard() {
 
           <KpiCard
             title="Active"
-            value={data.active_orders}
+            value={data.orders.active}
             icon={Package}
             color="text-blue-600"
             onClick={() => navigate("/orders?status=active")}
           />
 
           <KpiCard
-            title="Partially Received"
-            value={data.partial_orders}
-            icon={Clock3}
-            color="text-violet-600"
-            onClick={() => navigate("/orders?status=partial")}
-          />
-
-          <KpiCard
             title="Completed"
-            value={data.completed_orders}
+            value={data.orders.completed}
             icon={CheckCircle2}
             color="text-green-600"
             onClick={() => navigate("/orders?status=completed")}
@@ -83,7 +73,7 @@ export default function Dashboard() {
 
           <KpiCard
             title="Cancelled"
-            value={data.cancelled_orders}
+            value={data.orders.cancelled}
             icon={Ban}
             color="text-red-600"
             onClick={() => navigate("/orders?status=cancelled")}
@@ -91,115 +81,137 @@ export default function Dashboard() {
         </div>
       </DashboardSection>
 
-      {/* Production qunatities */}
+      {/* ========================================= */}
 
-      <DashboardSection title="Production Quantities">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <KpiCard
-            title="Qty Raised"
-            value={data.total_qty_raised}
-            icon={Boxes}
-            color="text-indigo-600"
-          />
+      <DashboardSection title="Production Stages">
+        <ProductionStageCards
+          stages={data.production_stages}
+          onStageClick={(stage) =>
+            navigate(`/production-stage/${stage.stage_id}`)
+          }
+        />
+      </DashboardSection>
 
-          <KpiCard
-            title="Qty Received"
-            value={data.total_qty_received}
-            icon={ArrowDownCircle}
-            color="text-green-600"
-          />
+      {/* ========================================= */}
 
-          <KpiCard
-            title="Outstanding"
-            value={data.total_balance}
-            icon={Package}
-            color="text-indigo-600"
-          />
+      <DashboardSection title="Production Progress">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="space-y-4">
+            <KpiCard
+              title="Qty Raised"
+              value={data.production.qty_raised}
+              icon={Boxes}
+              color="text-indigo-600"
+            />
+
+            <KpiCard
+              title="Qty Received"
+              value={data.production.qty_received}
+              icon={ArrowDownCircle}
+              color="text-green-600"
+            />
+
+            <KpiCard
+              title="Outstanding"
+              value={data.production.balance}
+              icon={Package}
+              color="text-indigo-600"
+            />
+          </div>
+
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Production Progress</CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                <ProgressStat
+                  title="Items Received"
+                  value={data.production.qty_received}
+                  total={data.production.qty_raised}
+                />
+              </CardContent>
+            </Card>
+          </div>
         </div>
+      </DashboardSection>
 
+      {/* ========================================= */}
+
+      <DashboardSection title="Recent Production Activity">
         <Card>
-          <CardHeader>
-            <CardTitle>Production Progress</CardTitle>
-          </CardHeader>
+          <CardContent className="p-0">
+            <div className="divide-y">
+              {data.recent_activity.map((activity) => (
+                <button
+                  key={`${activity.wso_id}-${activity.changed_at}`}
+                  onClick={() => navigate(`/orders/${activity.wso_id}`)}
+                  className="w-full p-5 text-left transition hover:bg-slate-50"
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="font-semibold">
+                        {activity.description}
+                      </div>
 
-          <CardContent>
-            <ProgressStat
-              title="Items Received"
-              value={data.total_qty_received}
-              total={data.total_qty_raised}
-            />
-          </CardContent>
-        </Card>
+                      <div className="text-sm text-slate-500">
+                        WSO {activity.wso_number}
+                      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Status Distribution</CardTitle>
-          </CardHeader>
+                      <div className="mt-2 text-sm">
+                        moved to{" "}
+                        <span className="font-medium text-indigo-600">
+                          {activity.stage_name}
+                        </span>
+                      </div>
+                    </div>
 
-          <CardContent>
-            <OrderStatusChart
-              active={data.active_orders}
-              partial={data.partial_orders}
-              completed={data.completed_orders}
-              cancelled={data.cancelled_orders}
-            />
+                    <div className="text-right text-sm text-slate-500">
+                      <div>{activity.changed_by}</div>
+
+                      <div>
+                        {new Date(activity.changed_at).toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </DashboardSection>
 
-      {/* ==========================
-                    Dashboard Tables
-            =========================== */}
+            {/* ========================================= */}
 
-      <div className="grid lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Workshop Orders</CardTitle>
-          </CardHeader>
+      <DashboardSection title="Attention Required">
 
-          <CardContent>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-2">WSO</th>
+        {attentionLoading ? (
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-sm text-slate-500">
+                Checking for items that require attention...
+              </p>
+            </CardContent>
+          </Card>
+        ) : attentionError ? (
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-sm text-red-600">
+                Unable to load attention-required items.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <AttentionRequired
+            items={attentionItems ?? []}
+            onItemClick={(item) =>
+              navigate(`/orders/${item.wso_id}`)
+            }
+          />
+        )}
 
-                  <th className="text-left py-2">Status</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {data.recent_orders.map((order) => (
-                  <tr
-                    key={order.id}
-                    className="border-b hover:bg-slate-50 cursor-pointer"
-                    onClick={() => navigate(`/orders/${order.id}`)}
-                  >
-                    <td className="py-3">{order.wso_number}</td>
-
-                    <td>
-                      <StatusBadge status={order.status} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Largest Outstanding Orders</CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-sm text-slate-500 mb-4">
-              Click any bar to open the Workshop Order.
-            </p>
-
-            <LargestOutstandingChart data={data.largest_outstanding} />
-          </CardContent>
-        </Card>
-      </div>
+      </DashboardSection>
     </div>
   );
 }

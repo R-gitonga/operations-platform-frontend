@@ -8,6 +8,10 @@ import OrdersPage from "@/pages/orders/OrdersPage";
 import CreateWorkshopOrder from "@/pages/orders/CreateOrderPage";
 import WorkshopOrderDetail from "@/pages/orders/OrderDetailPage";
 
+import ProductionStagePage from "@/pages/dashboard/ProductionStagePage";
+
+import ProductionStagesPage from "@/pages/settings/ProductionStagesPage";
+
 import SettingsPage from "@/pages/settings/SettingsPage";
 
 import NotFound from "@/pages/NotFound";
@@ -39,8 +43,18 @@ export function AppRoutes() {
                 />
 
                 <Route
+                    path="/production-stage/:stageId"
+                    element={<ProductionStagePage />}
+                />
+
+                <Route
                     path="/settings"
                     element={<SettingsPage />}
+                />
+
+                <Route
+                    path="/settings/production-stages"
+                    element={<ProductionStagesPage />}
                 />
 
             </Route>

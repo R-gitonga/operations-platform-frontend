@@ -12,13 +12,16 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import { toast } from "sonner";
 
 import { useCancelWso } from "@/hooks/useCancelWso";
+
+import { getApiErrorMessage } from "@/lib/apiError";
 
 import type { ReactNode } from "react";
 
 interface CancelWsoDialogProps {
-    id: number,
+    id: number;
     trigger: ReactNode;
 }
 
@@ -26,21 +29,30 @@ export default function CancelWsoDialog({
     id,
     trigger,
 }: CancelWsoDialogProps) {
+
     const [open, setOpen] = useState(false);
 
     const mutation = useCancelWso();
 
     function handleCancel() {
+
         mutation.mutate(id, {
 
             onSuccess: () => {
-                    setOpen(false);
-                },
 
-                onError: (error) => {
-                    console.error(error);
-                    alert("Failed to cancel Workshop order.");
-                },
+                toast.success(
+                    "Workshop Order cancelled successfully."
+                );
+
+                setOpen(false);
+            },
+
+            onError: (error) => {
+
+                toast.error(
+                    getApiErrorMessage(error)
+                );
+            },
         });
     }
 
@@ -49,25 +61,31 @@ export default function CancelWsoDialog({
             open={open}
             onOpenChange={setOpen}
         >
+
             <DialogTrigger asChild>
                 {trigger}
             </DialogTrigger>
 
             <DialogContent>
+
                 <DialogHeader>
+
                     <DialogTitle>
                         Cancel Workshop Order
                     </DialogTitle>
 
                     <DialogDescription>
-                        This will mark the workshop order as 
+                        This will mark the workshop order as{" "}
                         <strong>Cancelled</strong>.
                         <br />
-                        This action can be reversed later by an administrator if required.
+                        This action can be reversed later by an administrator if
+                        required.
                     </DialogDescription>
+
                 </DialogHeader>
 
                 <DialogFooter>
+
                     <Button
                         variant="outline"
                         onClick={() => setOpen(false)}
@@ -80,7 +98,9 @@ export default function CancelWsoDialog({
                         onClick={handleCancel}
                         disabled={mutation.isPending}
                     >
-                        {mutation.isPending ? "Cancelling" : "Cancel WSO"}
+                        {mutation.isPending
+                            ? "Cancelling..."
+                            : "Cancel WSO"}
                     </Button>
 
                 </DialogFooter>
@@ -88,7 +108,5 @@ export default function CancelWsoDialog({
             </DialogContent>
 
         </Dialog>
-        
     );
 }
-

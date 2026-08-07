@@ -6,7 +6,7 @@ export function useCancelWso() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (id: number) => cancelWso(id),
+        mutationFn: cancelWso,
 
         onSuccess: async (_, id) => {
 

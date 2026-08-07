@@ -1,7 +1,4 @@
-import {
-    Card,
-    CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 import type { WsoItemDetail } from "@/types/wso";
 
@@ -11,47 +8,33 @@ import ProductionTimelineCard from "./ProductionTimeLineCard";
 import LineItemsTable from "./SizeBreakdownCard";
 
 interface Props {
-    item: WsoItemDetail;
-    wsoStatus: string;
-    wsoId: number;
+  item: WsoItemDetail;
+  wsoStatus: string;
+  wsoId: number;
 }
 
 export default function ProductionItemSection({
-    item,
-    wsoStatus,
-    wsoId,
+  item,
+  wsoStatus,
+  wsoId,
 }: Props) {
-    return (
+  return (
+    <Card className="overflow-hidden">
+      <CardContent className="space-y-8 p-6">
+        <ProductHeader item={item} />
 
-        <Card className="overflow-hidden">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <ProductionItemSummaryCard
+            item={item}
+            wsoId={wsoId}
+            wsoStatus={wsoStatus}
+          />
 
-            <CardContent className="space-y-8 p-6">
+          <ProductionTimelineCard wsoItemId={item.id} />
+        </div>
 
-                <ProductHeader
-                    item={item}
-                />
-
-                <div className="grid gap-6 lg:grid-cols-2">
-
-                    <ProductionItemSummaryCard
-                        item={item}
-                        wsoId={wsoId}
-                    />
-
-                    <ProductionTimelineCard
-                        wsoItemId={item.id}
-                    />
-
-                </div>
-
-                <LineItemsTable
-                    item={item}
-                    wsoStatus={wsoStatus}
-                />
-
-            </CardContent>
-
-        </Card>
-
-    );
+        <LineItemsTable item={item} wsoStatus={wsoStatus} />
+      </CardContent>
+    </Card>
+  );
 }

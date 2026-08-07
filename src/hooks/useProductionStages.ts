@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getProductionStages } from "@/api/production";
+import { getProductionStages } from "@/api/productionStage";
 
 export function useProductionStages() {
 
