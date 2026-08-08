@@ -1,24 +1,23 @@
 import type { NotificationRecipient } from "@/types/settings";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { Pencil } from "lucide-react";
+import { CircleOff, Pencil } from "lucide-react";
 
 import RecipientDialog from "./RecipientDialog";
 
 import { useState } from "react";
+import { useNotificationEvents } from "@/hooks/useNotificationEvents";
+import { useUpdateNotificationRecipient } from "@/hooks/useUpdateNotificationRecipient";
 
 interface Props {
   recipients: NotificationRecipient[];
@@ -26,9 +25,36 @@ interface Props {
 
 export default function NotificationRecipientsTable({ recipients }: Props) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  
+  const { data: events = [] } = useNotificationEvents();
+  const updateRecipient = useUpdateNotificationRecipient();
+
   const [selectedRecipient, setSelectedRecipient] =
       useState<NotificationRecipient | undefined>();
+
+  const recipientsByEvent = new Map<number, NotificationRecipient[]>();
+
+  recipients.forEach((recipient) => {
+    const recipientsForEvent = recipientsByEvent.get(recipient.notification_event_id) ?? [];
+    recipientsForEvent.push(recipient);
+    recipientsByEvent.set(recipient.notification_event_id, recipientsForEvent);
+  });
+
+  const eventGroups = events.map((event) => ({
+    id: event.id,
+    name: event.display_name,
+    recipients: recipientsByEvent.get(event.id) ?? [],
+  }));
+
+  recipientsByEvent.forEach((eventRecipients, eventId) => {
+    if (!events.some((event) => event.id === eventId)) {
+      eventGroups.push({
+        id: eventId,
+        name: eventRecipients[0].event_name,
+        recipients: eventRecipients,
+      });
+    }
+  });
+
   return (
     <>
     <Card>
@@ -46,53 +72,88 @@ export default function NotificationRecipientsTable({ recipients }: Props) {
       </CardHeader>
 
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Event</TableHead>
-              <TableHead>Recipient</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-28">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
+        <Accordion type="multiple" className="rounded-lg border px-4">
+          {eventGroups.map((event) => (
+            <AccordionItem key={event.id} value={event.id.toString()}>
+              <AccordionTrigger className="py-4 hover:no-underline">
+                <span className="flex items-center gap-3">
+                  <span>{event.name}</span>
+                  <span className="text-xs font-normal text-slate-500">
+                    {event.recipients.length} {event.recipients.length === 1 ? "recipient" : "recipients"}
+                  </span>
+                </span>
+              </AccordionTrigger>
 
-          <TableBody>
-            {recipients.map((recipient) => (
-              <TableRow key={recipient.id}>
-                <TableCell className="font-medium">
-                  {recipient.event_name}
-                </TableCell>
+              <AccordionContent>
+                {event.recipients.length === 0 ? (
+                  <p className="pb-3 text-slate-500">
+                    No recipients have been added for this event.
+                  </p>
+                ) : (
+                  <div className="space-y-3 pb-3">
+                    {event.recipients.map((recipient) => (
+                      <div
+                        key={recipient.id}
+                        className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div className="min-w-0">
+                          <p className="font-medium">{recipient.display_name}</p>
+                          <a
+                            href={`mailto:${recipient.email}`}
+                            className="text-sm text-slate-600 hover:underline"
+                          >
+                            {recipient.email}
+                          </a>
+                        </div>
 
-                <TableCell>{recipient.display_name}</TableCell>
+                        <div className="flex items-center gap-3">
+                          <Badge variant={recipient.enabled ? "default" : "secondary"}>
+                            {recipient.enabled ? "Enabled" : "Disabled"}
+                          </Badge>
 
-                <TableCell className="text-slate-600">
-                  {recipient.email}
-                </TableCell>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={updateRecipient.isPending}
+                            onClick={() => {
+                              setSelectedRecipient(recipient);
+                              setDialogOpen(true);
+                            }}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </Button>
 
-                <TableCell>
-                  <Badge variant={recipient.enabled ? "default" : "secondary"}>
-                    {recipient.enabled ? "Enabled" : "Disabled"}
-                  </Badge>
-                </TableCell>
-
-                <TableCell>
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedRecipient(recipient);
-                      setDialogOpen(true);
-                    }}
-                  >
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                          {recipient.enabled && (
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={updateRecipient.isPending}
+                              onClick={() =>
+                                updateRecipient.mutate({
+                                  id: recipient.id,
+                                  request: {
+                                    notification_event_id: recipient.notification_event_id,
+                                    display_name: recipient.display_name,
+                                    email: recipient.email,
+                                    enabled: false,
+                                  },
+                                })
+                              }
+                            >
+                              <CircleOff className="mr-2 h-4 w-4" />
+                              Deactivate
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </CardContent>
     </Card>
 

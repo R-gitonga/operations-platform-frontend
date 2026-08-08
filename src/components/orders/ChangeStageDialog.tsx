@@ -76,7 +76,6 @@ export default function ChangeStageDialog({
       {
         production_stage_id: Number(stageId),
         notes,
-        changed_by: "Rodney Gitonga",
       },
       {
         onSuccess: () => {

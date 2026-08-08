@@ -34,6 +34,4 @@ export interface UpdateProductionStageRequest {
     production_stage_id: number;
 
     notes?: string;
-
-    changed_by: string;
 }

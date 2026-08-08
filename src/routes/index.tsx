@@ -11,10 +11,13 @@ import WorkshopOrderDetail from "@/pages/orders/OrderDetailPage";
 import ProductionStagePage from "@/pages/dashboard/ProductionStagePage";
 
 import ProductionStagesPage from "@/pages/settings/ProductionStagesPage";
+import NotificationBehaviourPage from "@/pages/settings/NotificationBehaviourPage";
+import NotificationRecipientsPage from "@/pages/settings/NotificationRecipientsPage";
 
 import SettingsPage from "@/pages/settings/SettingsPage";
 
 import NotFound from "@/pages/NotFound";
+import LoginPage from "@/pages/auth/LoginPage";
 
 export function AppRoutes() {
     return (
@@ -57,7 +60,22 @@ export function AppRoutes() {
                     element={<ProductionStagesPage />}
                 />
 
+                <Route
+                    path="/settings/notification-behaviour"
+                    element={<NotificationBehaviourPage />}
+                />
+
+                <Route
+                    path="/settings/notification-recipients"
+                    element={<NotificationRecipientsPage />}
+                />
+
             </Route>
+
+            <Route
+                path="/login"
+                element={<LoginPage />}
+            />
 
             <Route
                 path="/404"

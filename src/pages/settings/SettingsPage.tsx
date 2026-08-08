@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { ArrowRight, Factory } from "lucide-react";
+import { ArrowRight, Bell, Factory, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,33 +11,9 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { useNotificationSettings } from "@/hooks/useNotificationSettings";
-import { useNotificationRecipients } from "@/hooks/useNotificationRecipients";
-
-import NotificationSettingsTable from "@/components/settings/NotificationSettingsTable";
-import NotificationRecipientsTable from "@/components/settings/NotificationRecipientsTable";
-
 export default function SettingsPage() {
 
     const navigate = useNavigate();
-
-    const {
-        data,
-        isLoading,
-        error,
-    } = useNotificationSettings();
-
-    const {
-        data: recipients,
-    } = useNotificationRecipients();
-
-    if (isLoading) {
-        return <p>Loading settings...</p>;
-    }
-
-    if (error) {
-        return <p>Failed to load settings.</p>;
-    }
 
     return (
 
@@ -118,17 +94,87 @@ export default function SettingsPage() {
                     Notifications
                 </h2>
 
-                <NotificationSettingsTable
-                    settings={data ?? []}
-                />
+                <div className="grid gap-4 lg:grid-cols-2">
 
-                {recipients && (
+                    <Card>
 
-                    <NotificationRecipientsTable
-                        recipients={recipients}
-                    />
+                        <CardHeader>
 
-                )}
+                            <CardTitle className="flex items-center gap-2">
+
+                                <Bell className="h-5 w-5" />
+
+                                Notification Behaviour
+
+                            </CardTitle>
+
+                            <CardDescription>
+
+                                Choose which notification events are active and
+                                whether they are sent by email or in-app.
+
+                            </CardDescription>
+
+                        </CardHeader>
+
+                        <CardContent>
+
+                            <Button
+                                onClick={() =>
+                                    navigate("/settings/notification-behaviour")
+                                }
+                                className="gap-2"
+                            >
+                                Open
+
+                                <ArrowRight className="h-4 w-4" />
+
+                            </Button>
+
+                        </CardContent>
+
+                    </Card>
+
+                    <Card>
+
+                        <CardHeader>
+
+                            <CardTitle className="flex items-center gap-2">
+
+                                <Users className="h-5 w-5" />
+
+                                Notification Recipients
+
+                            </CardTitle>
+
+                            <CardDescription>
+
+                                Decide who receives notifications for each
+                                event.
+
+                            </CardDescription>
+
+                        </CardHeader>
+
+                        <CardContent>
+
+                            <Button
+                                onClick={() =>
+                                    navigate("/settings/notification-recipients")
+                                }
+                                className="gap-2"
+                            >
+                                Open
+
+                                <ArrowRight className="h-4 w-4" />
+
+                            </Button>
+
+                        </CardContent>
+
+                    </Card>
+
+                </div>
 
             </section>
 
