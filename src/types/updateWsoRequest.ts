@@ -7,7 +7,7 @@ export interface updateWsoRequest {
     design_code?: string;
     fabric_code?: string;
     remarks?: string;
-    attachment_name?: String;
-    attachment_path?: String;
+    attachment_name?: string;
+    attachment_path?: string;
     status?: string;
 }

@@ -2,7 +2,6 @@ import {
     LayoutDashboard,
     ClipboardList,
     FilePlus2,
-    LogIn,
     Settings,
 } from "lucide-react";
 
@@ -26,10 +25,5 @@ export const navigation = [
         title: "Settings",
         url: "/settings",
         icon: Settings,
-    },
-    {
-        title: "Sign in",
-        url: "/login",
-        icon: LogIn,
     },
 ];
