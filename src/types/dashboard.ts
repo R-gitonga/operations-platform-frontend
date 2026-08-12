@@ -22,10 +22,19 @@ export interface ProductionStageSummary {
 export interface DashboardRecentActivity {
     wso_id: number;
     wso_number: string;
+    wso_item_id: number;
     description: string;
     stage_name: string;
-    changed_by: string;
+    changed_by: string | null;
     changed_at: string;
+}
+
+export interface RecentActivityPage {
+    items: DashboardRecentActivity[];
+    page: number;
+    page_size: number;
+    total: number;
+    total_pages: number;
 }
 
 export interface DashboardRecentOrder {
@@ -47,7 +56,7 @@ export interface DashboardSummary {
 
     production_stages: ProductionStageSummary[];
 
-    recent_activity: DashboardRecentActivity[];
+    recent_activity: RecentActivityPage;
 
     recent_orders: DashboardRecentOrder[];
 

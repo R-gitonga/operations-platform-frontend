@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import {
   ClipboardList,
@@ -23,7 +24,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useDashboard();
+  const [activityPage, setActivityPage] = useState(1);
+
+  const { data, isLoading, error } = useDashboard(activityPage, 10);
 
   const {
     data: attentionItems,
@@ -142,50 +145,98 @@ export default function Dashboard() {
       <DashboardSection title="Recent Production Activity">
         <Card>
           <CardContent className="p-0">
-            <div className="divide-y">
-              {data.recent_activity.map((activity) => (
-                <button
-                  key={`${activity.wso_id}-${activity.changed_at}`}
-                  onClick={() => navigate(`/orders/${activity.wso_id}`)}
-                  className="w-full p-5 text-left transition hover:bg-slate-50"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="font-semibold">
-                        {activity.description}
-                      </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b bg-slate-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-medium text-slate-600">
+                      WSO
+                    </th>
 
-                      <div className="text-sm text-slate-500">
-                        WSO {activity.wso_number}
-                      </div>
+                    <th className="px-4 py-3 text-left font-medium text-slate-600">
+                      Item
+                    </th>
 
-                      <div className="mt-2 text-sm">
-                        moved to{" "}
+                    <th className="px-4 py-3 text-left font-medium text-slate-600">
+                      Stage
+                    </th>
+
+                    <th className="px-4 py-3 text-left font-medium text-slate-600">
+                      Changed By
+                    </th>
+
+                    <th className="px-4 py-3 text-left font-medium text-slate-600">
+                      Date
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y">
+                  {data.recent_activity.items.map((activity) => (
+                    <tr
+                      key={`${activity.wso_id}-${activity.wso_item_id}-${activity.changed_at}`}
+                      onClick={() => navigate(`/orders/${activity.wso_id}`)}
+                      className="cursor-pointer transition hover:bg-slate-50"
+                    >
+                      <td className="px-4 py-3 font-medium">
+                        {activity.wso_number}
+                      </td>
+
+                      <td className="px-4 py-3">{activity.description}</td>
+
+                      <td className="px-4 py-3">
                         <span className="font-medium text-indigo-600">
                           {activity.stage_name}
                         </span>
-                      </div>
-                    </div>
+                      </td>
 
-                    <div className="text-right text-sm text-slate-500">
-                      <div>{activity.changed_by}</div>
+                      <td className="px-4 py-3 text-slate-500">
+                        {activity.changed_by ?? "System"}
+                      </td>
 
-                      <div>
+                      <td className="px-4 py-3 whitespace-nowrap text-slate-500">
                         {new Date(activity.changed_at).toLocaleString()}
-                      </div>
-                    </div>
-                  </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="flex items-center justify-between border-t px-4 py-3">
+              <div className="text-sm text-slate-500">
+                Showing page {data.recent_activity.page} of{" "}
+                {data.recent_activity.total_pages}
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={activityPage <= 1}
+                  onClick={() => setActivityPage((page) => page - 1)}
+                  className="rounded border px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Previous
                 </button>
-              ))}
+
+                <button
+                  type="button"
+                  disabled={activityPage >= data.recent_activity.total_pages}
+                  onClick={() => setActivityPage((page) => page + 1)}
+                  className="rounded border px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </CardContent>
         </Card>
       </DashboardSection>
 
-            {/* ========================================= */}
+      {/* ========================================= */}
 
       <DashboardSection title="Attention Required">
-
         {attentionLoading ? (
           <Card>
             <CardContent className="p-6">
@@ -205,12 +256,9 @@ export default function Dashboard() {
         ) : (
           <AttentionRequired
             items={attentionItems ?? []}
-            onItemClick={(item) =>
-              navigate(`/orders/${item.wso_id}`)
-            }
+            onItemClick={(item) => navigate(`/orders/${item.wso_id}`)}
           />
         )}
-
       </DashboardSection>
     </div>
   );

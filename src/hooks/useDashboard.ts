@@ -2,10 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getDashboard } from "@/api/dashboard";
 
-
-export function useDashboard() {
+export function useDashboard(
+    page = 1,
+    pageSize = 10
+) {
     return useQuery({
-        queryKey: ["dashboard"],
-        queryFn: getDashboard,
+        queryKey: ["dashboard", page, pageSize],
+        queryFn: () => getDashboard(page, pageSize),
     });
 }
