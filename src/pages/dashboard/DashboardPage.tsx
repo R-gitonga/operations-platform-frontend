@@ -12,12 +12,15 @@ import {
 
 import { useDashboard } from "@/hooks/useDashboard";
 import { useAttentionRequired } from "@/hooks/useAttentionRequired";
+import { usePartialReceivingAttention } from "@/hooks/usePartialReceiving";
 
 import KpiCard from "@/components/dashboard/KpiCard";
 import DashboardSection from "@/components/dashboard/DashboardSection";
 import ProductionStageCards from "@/components/dashboard/ProductionStageCards";
 import ProgressStat from "@/components/dashboard/ProgressStat";
 import AttentionRequired from "@/components/dashboard/AttentionRequired";
+import PartialReceivingAttention from "@/components/dashboard/PartialReceivingAttention";
+import PartialReceivingSettingsCard from "@/components/dashboard/PartialReceivingSettingsCard";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -34,9 +37,19 @@ export default function Dashboard() {
     error: attentionError,
   } = useAttentionRequired();
 
-  if (isLoading) return <p>Loading Dashboard...</p>;
+  const {
+    data: partialReceivingItems,
+    isLoading: partialReceivingLoading,
+    error: partialReceivingError,
+  } = usePartialReceivingAttention();
 
-  if (error || !data) return <p>Failed to load Dashboard.</p>;
+  if (isLoading) {
+    return <p>Loading Dashboard...</p>;
+  }
+
+  if (error || !data) {
+    return <p>Failed to load Dashboard.</p>;
+  }
 
   return (
     <div className="space-y-10">
@@ -47,9 +60,11 @@ export default function Dashboard() {
       </div>
 
       {/* ========================================= */}
+      {/* Production Overview */}
+      {/* ========================================= */}
 
       <DashboardSection title="Production Overview">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           <KpiCard
             title="Total Orders"
             value={data.orders.total}
@@ -85,6 +100,8 @@ export default function Dashboard() {
       </DashboardSection>
 
       {/* ========================================= */}
+      {/* Production Stages */}
+      {/* ========================================= */}
 
       <DashboardSection title="Production Stages">
         <ProductionStageCards
@@ -96,9 +113,11 @@ export default function Dashboard() {
       </DashboardSection>
 
       {/* ========================================= */}
+      {/* Production Progress */}
+      {/* ========================================= */}
 
       <DashboardSection title="Production Progress">
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-4">
             <KpiCard
               title="Qty Raised"
@@ -140,6 +159,8 @@ export default function Dashboard() {
         </div>
       </DashboardSection>
 
+      {/* ========================================= */}
+      {/* Recent Production Activity */}
       {/* ========================================= */}
 
       <DashboardSection title="Recent Production Activity">
@@ -194,7 +215,7 @@ export default function Dashboard() {
                         {activity.changed_by ?? "System"}
                       </td>
 
-                      <td className="px-4 py-3 whitespace-nowrap text-slate-500">
+                      <td className="whitespace-nowrap px-4 py-3 text-slate-500">
                         {new Date(activity.changed_at).toLocaleString()}
                       </td>
                     </tr>
@@ -204,6 +225,7 @@ export default function Dashboard() {
             </div>
 
             {/* Pagination */}
+
             <div className="flex items-center justify-between border-t px-4 py-3">
               <div className="text-sm text-slate-500">
                 Showing page {data.recent_activity.page} of{" "}
@@ -235,6 +257,8 @@ export default function Dashboard() {
       </DashboardSection>
 
       {/* ========================================= */}
+      {/* Production Attention */}
+      {/* ========================================= */}
 
       <DashboardSection title="Attention Required">
         {attentionLoading ? (
@@ -256,6 +280,41 @@ export default function Dashboard() {
         ) : (
           <AttentionRequired
             items={attentionItems ?? []}
+            onItemClick={(item) => navigate(`/orders/${item.wso_id}`)}
+          />
+        )}
+      </DashboardSection>
+
+      {/* ========================================= */}
+      {/* Partial Receiving Attention */}
+      {/* ========================================= */}
+
+      {/* ========================================= */}
+
+      <DashboardSection title="Settings">
+        <PartialReceivingSettingsCard />
+      </DashboardSection>
+
+      <DashboardSection title="Partial Receiving Attention">
+        {partialReceivingLoading ? (
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-sm text-slate-500">
+                Checking for partial receipts that require attention...
+              </p>
+            </CardContent>
+          </Card>
+        ) : partialReceivingError ? (
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-sm text-red-600">
+                Unable to load partial receiving attention items.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <PartialReceivingAttention
+            items={partialReceivingItems ?? []}
             onItemClick={(item) => navigate(`/orders/${item.wso_id}`)}
           />
         )}
