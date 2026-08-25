@@ -9,6 +9,7 @@ import {
 import { Search } from "lucide-react";
 
 import { useWsos } from "@/hooks/useWsos";
+import { useCategories } from "@/hooks/useCategories";
 
 import type { WsoOrder } from "@/types/wso";
 
@@ -33,6 +34,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import CategoryItemsModal from "@/components/orders/CategoryItemsModal";
+
 
 export default function OrdersPage() {
     const navigate = useNavigate();
@@ -46,6 +49,24 @@ export default function OrdersPage() {
     const [search, setSearch] = useState(initialSearch);
 
     const [status, setStatus] = useState(initialStatus);
+
+    const { data: categories } = useCategories();
+
+    const [categoryModalId, setCategoryModalId] =
+        useState<number | null>(null);
+
+    function handleCategoryChange(value: string) {
+
+        if (value === "all") {
+            return;
+        }
+
+        setCategoryModalId(Number(value));
+    }
+
+    const selectedCategory = categories?.find(
+        (category) => category.id === categoryModalId,
+    );
 
     useEffect(() => {
 
@@ -102,7 +123,7 @@ export default function OrdersPage() {
 
                 <CardContent>
 
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 md:grid-cols-3">
 
                         <div className="relative">
 
@@ -160,6 +181,38 @@ export default function OrdersPage() {
                                 <SelectItem value="cancelled">
                                     Cancelled
                                 </SelectItem>
+
+                            </SelectContent>
+
+                        </Select>
+
+                        <Select
+                            value="all"
+                            onValueChange={handleCategoryChange}
+                        >
+
+                            <SelectTrigger>
+
+                                <SelectValue placeholder="Filter by Category..." />
+
+                            </SelectTrigger>
+
+                            <SelectContent>
+
+                                <SelectItem value="all">
+                                    Filter by Category...
+                                </SelectItem>
+
+                                {categories?.map((category) => (
+
+                                    <SelectItem
+                                        key={category.id}
+                                        value={String(category.id)}
+                                    >
+                                        {category.name}
+                                    </SelectItem>
+
+                                ))}
 
                             </SelectContent>
 
@@ -279,6 +332,19 @@ export default function OrdersPage() {
                 </CardContent>
 
             </Card>
+
+            <CategoryItemsModal
+                open={categoryModalId !== null}
+                onOpenChange={(open) => {
+
+                    if (!open) {
+                        setCategoryModalId(null);
+                    }
+
+                }}
+                categoryId={categoryModalId}
+                categoryName={selectedCategory?.name ?? null}
+            />
 
         </div>
 

@@ -306,9 +306,6 @@ export default function Dashboard() {
 
       {/* ========================================= */}
 
-      <DashboardSection title="Settings">
-        <PartialReceivingSettingsCard />
-      </DashboardSection>
 
       <DashboardSection title="Partial Receiving Attention">
         {partialReceivingLoading ? (

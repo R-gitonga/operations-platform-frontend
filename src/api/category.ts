@@ -1,6 +1,7 @@
 import { api } from "@/lib/api";
 
 import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "@/types/category";
+import type { WsoItemByCategory } from "@/types/wsoItemByCategory";
 
 export async function getCategories(): Promise<Category[]> {
     const response = await api.get(
@@ -38,6 +39,16 @@ export async function deleteCategory(
 ): Promise<Category> {
     const response = await api.delete(
         `/categories/${id}`
+    );
+
+    return response.data;
+}
+
+export async function getCategoryItems(
+    id: number
+): Promise<WsoItemByCategory[]> {
+    const response = await api.get<WsoItemByCategory[]>(
+        `/categories/${id}/items`
     );
 
     return response.data;
