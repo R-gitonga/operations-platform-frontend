@@ -206,9 +206,24 @@ export default function Dashboard() {
                       <td className="px-4 py-3">{activity.description}</td>
 
                       <td className="px-4 py-3">
-                        <span className="font-medium text-indigo-600">
-                          {activity.stage_name}
-                        </span>
+                        {activity.event_type === "partial_received" ? (
+                          <div>
+                            <span className="flex items-center gap-1.5 font-medium text-amber-600">
+                              <ArrowDownCircle className="h-4 w-4" />
+                              {activity.stage_name}
+                            </span>
+
+                            <span className="text-xs text-slate-500">
+                              {activity.quantity_received} of{" "}
+                              {activity.total_raised} raised —{" "}
+                              {activity.balance} remaining
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="font-medium text-indigo-600">
+                            {activity.stage_name}
+                          </span>
+                        )}
                       </td>
 
                       <td className="px-4 py-3 text-slate-500">

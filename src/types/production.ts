@@ -12,18 +12,32 @@ export interface ProductionStage {
     sort_order: number;
 }
 
+export type TimelineEventType = "stage_change" | "partial_received";
+
 export interface StageHistory {
-    id: number;
+    // Prefixed ("stage-7" / "receipt-12") since entries now come
+    // from two different backend sources.
+    id: string;
 
-    wso_order_id: number;
+    wso_item_id: number;
 
-    production_stage_id: number;
+    event_type: TimelineEventType;
+
+    // Only set when event_type is "stage_change".
+    production_stage_id: number | null;
 
     stage_name: string;
 
     stage_color: string;
 
     notes: string | null;
+
+    // Only set when event_type is "partial_received".
+    quantity_received: number | null;
+
+    total_raised: number | null;
+
+    balance: number | null;
 
     changed_by: string;
 

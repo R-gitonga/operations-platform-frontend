@@ -48,14 +48,14 @@ export default function ProductionTimelineCard({
 
                 <div className="space-y-6">
 
-                    {history.map(stage => (
+                    {history.map(event => (
 
                         <div
-                            key={stage.id}
+                            key={event.id}
                             className="border-l-4 pl-4"
                             style={{
                                 borderColor:
-                                    stage.stage_color,
+                                    event.stage_color,
                             }}
                         >
 
@@ -63,14 +63,14 @@ export default function ProductionTimelineCard({
 
                                 <h4 className="font-semibold">
 
-                                    {stage.stage_name}
+                                    {event.stage_name}
 
                                 </h4>
 
                                 <span className="text-xs text-slate-500">
 
                                     {new Date(
-                                        stage.changed_at,
+                                        event.changed_at,
                                     ).toLocaleString()}
 
                                 </span>
@@ -79,15 +79,29 @@ export default function ProductionTimelineCard({
 
                             <p className="text-sm text-slate-600">
 
-                                Changed by {stage.changed_by}
+                                {event.event_type === "partial_received"
+                                    ? `Received by ${event.changed_by}`
+                                    : `Changed by ${event.changed_by}`}
 
                             </p>
 
-                            {stage.notes && (
+                            {event.event_type === "partial_received" && (
+
+                                <p className="mt-2 rounded bg-amber-50 p-2 text-sm text-amber-900">
+
+                                    Received {event.quantity_received} of{" "}
+                                    {event.total_raised} raised — {event.balance}{" "}
+                                    remaining.
+
+                                </p>
+
+                            )}
+
+                            {event.notes && (
 
                                 <p className="mt-2 rounded bg-slate-100 p-2 text-sm">
 
-                                    {stage.notes}
+                                    {event.notes}
 
                                 </p>
 

@@ -3,6 +3,9 @@ import type {
     WsoLineItem,
 } from "./lineItem";
 import type { ProductionItemFormData } from "./productionItemForm";
+import type {
+    WsoItemBrandingDetail,
+} from "./branding";
 
 export interface WsoOrder {
     id: number;
@@ -64,6 +67,8 @@ export interface WsoItemDetail {
     branding_required: boolean;
 
     branding_completed: boolean;
+
+    branding: WsoItemBrandingDetail[];
 
     current_stage_id: number | null;
 

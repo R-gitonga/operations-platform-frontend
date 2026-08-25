@@ -36,7 +36,8 @@ export default function WsoForm() {
       design_code: "",
       fabric_code: "",
       branding_required: false,
-      branding_completed: false,
+      branding: [],
+      // branding_completed: false,
       line_items: [
         {
           size: "",
@@ -61,7 +62,8 @@ export default function WsoForm() {
         design_code: "",
         fabric_code: "",
         branding_required: false,
-        branding_completed: false,
+        branding: [],
+        // branding_completed: false,
         line_items: [
           {
             size: "",
@@ -90,7 +92,8 @@ export default function WsoForm() {
         design_code: item.design_code,
         fabric_code: item.fabric_code,
         branding_required: item.branding_required,
-        branding_completed: item.branding_completed,
+        // branding_completed: item.branding_completed,
+        branding: item.branding,
         line_items: item.line_items,
       })),
     };

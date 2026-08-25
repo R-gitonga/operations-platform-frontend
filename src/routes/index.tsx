@@ -15,6 +15,8 @@ import NotificationBehaviourPage from "@/pages/settings/NotificationBehaviourPag
 import NotificationRecipientsPage from "@/pages/settings/NotificationRecipientsPage";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import UserManagementPage from "@/pages/settings/UserManagementPage";
+import BrandingTypesPage from "@/pages/settings/BrandingTypesPage";
+import BrandingLocationsPage from "@/pages/settings/BrandingLocationsPage";
 
 import NotFound from "@/pages/NotFound";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -89,6 +91,16 @@ export function AppRoutes() {
                         <Route
                             path="/settings/users"
                             element={<UserManagementPage />}
+                        />
+
+                        <Route
+                            path="/settings/branding-types"
+                            element={<BrandingTypesPage />}
+                        />
+
+                        <Route
+                            path="/settings/branding-locations"
+                            element={<BrandingLocationsPage />}
                         />
                     </Route>
                 </Route>

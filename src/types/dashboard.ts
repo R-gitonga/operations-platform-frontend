@@ -19,13 +19,20 @@ export interface ProductionStageSummary {
     item_count: number;
 }
 
+export type TimelineEventType = "stage_change" | "partial_received";
+
 export interface DashboardRecentActivity {
     wso_id: number;
     wso_number: string;
     wso_item_id: number;
     description: string;
+    event_type: TimelineEventType;
     stage_name: string;
     changed_by: string | null;
+    notes: string | null;
+    quantity_received: number | null;
+    total_raised: number | null;
+    balance: number | null;
     changed_at: string;
 }
 

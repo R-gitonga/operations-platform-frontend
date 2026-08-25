@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { ArrowRight, Bell, Factory, Users } from "lucide-react";
+import { ArrowRight, Bell, Factory, Users, Tag, MapPin } from "lucide-react";
 
 import { useAuth } from "@/auth/AuthProvider";
 
@@ -165,6 +165,54 @@ export default function SettingsPage() {
 
               <CardContent>
                 <PartialReceivingSettingsCard />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Tag className="h-5 w-5" />
+                  Branding Types
+                </CardTitle>
+
+                <CardDescription>
+                  Manage the branding types (e.g. embroidery, screenprint)
+                  available when adding products to a WSO.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <Button
+                  onClick={() => navigate("/settings/branding-types")}
+                  className="gap-2"
+                >
+                  Open
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Branding Locations
+                </CardTitle>
+
+                <CardDescription>
+                  Manage the branding locations (e.g. pocket, sleeve, chest)
+                  available when adding products to a WSO.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <Button
+                  onClick={() => navigate("/settings/branding-locations")}
+                  className="gap-2"
+                >
+                  Open
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
               </CardContent>
             </Card>
           </div>

@@ -98,6 +98,57 @@ export default function ProductionItemSummaryCard({
 
           <DetailRow label="Latest Notes" value={item.current_stage_notes} />
 
+          {item.branding_required && (
+  <div className="border-t pt-6">
+    <div className="mb-3">
+      <p className="text-sm font-medium text-slate-500">
+        Branding
+      </p>
+
+      <p className="mt-1 font-medium">
+        Required
+      </p>
+    </div>
+
+    {item.branding.length > 0 ? (
+                <div className="space-y-2">
+                  {item.branding.map((branding) => (
+                    <div
+                      key={branding.id}
+                      className="rounded-md border bg-slate-50 p-3"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="font-medium">
+                            {branding.branding_type_name}
+                          </p>
+
+                          <p className="text-sm text-slate-500">
+                            {branding.branding_location_name}
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-sm text-slate-500">
+                            Quantity
+                          </p>
+
+                          <p className="font-semibold">
+                            {branding.quantity}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500">
+                  No branding requirements configured.
+                </p>
+              )}
+            </div>
+          )}
+
           <div className="pt-2">
             <SummaryRow label="Line Items" value={item.line_items.length} />
 
