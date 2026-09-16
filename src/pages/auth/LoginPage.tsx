@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { login } from "@/api/auth";
 import { useAuth } from "@/auth/AuthProvider";
@@ -119,6 +119,13 @@ export default function LoginPage() {
                                 }
                                 required
                             />
+
+                            <Link
+                                to="/forgot-password"
+                                className="block text-right text-sm text-blue-600 hover:underline"
+                            >
+                                Forgot password?
+                            </Link>
                         </div>
 
                         <div className="space-y-2">

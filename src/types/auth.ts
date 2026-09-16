@@ -9,3 +9,12 @@ export interface LoginResponse {
     display_name: string;
     role: string;
 }
+
+export interface ForgotPasswordRequest {
+    email: string;
+}
+
+export interface ResetPasswordRequest {
+    token: string;
+    password: string;
+}

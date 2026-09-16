@@ -278,7 +278,7 @@ export default function UserManagementPage() {
                                             event.target.value,
                                         )
                                     }
-                                    minLength={8}
+                                    minLength={4}
                                     required
                                 />
                             </div>

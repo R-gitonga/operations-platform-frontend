@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { ArrowRight, Bell, Factory, Users, Tag, MapPin } from "lucide-react";
+import { ArrowRight, Bell, Factory, Users, Tag, MapPin, Truck } from "lucide-react";
 
 import { useAuth } from "@/auth/AuthProvider";
 
@@ -208,6 +208,30 @@ export default function SettingsPage() {
               <CardContent>
                 <Button
                   onClick={() => navigate("/settings/branding-locations")}
+                  className="gap-2"
+                >
+                  Open
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Truck className="h-5 w-5" />
+                  Suppliers
+                </CardTitle>
+
+                <CardDescription>
+                  Manage the suppliers available when creating a Purchase
+                  Order.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <Button
+                  onClick={() => navigate("/settings/suppliers")}
                   className="gap-2"
                 >
                   Open

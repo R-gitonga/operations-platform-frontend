@@ -17,9 +17,15 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 import UserManagementPage from "@/pages/settings/UserManagementPage";
 import BrandingTypesPage from "@/pages/settings/BrandingTypesPage";
 import BrandingLocationsPage from "@/pages/settings/BrandingLocationsPage";
+import SuppliersPage from "@/pages/settings/SuppliersPage";
+import PurchaseOrdersPage from "@/pages/purchase-orders/PurchaseOrdersPage";
+import PurchaseOrderDetailPage from "@/pages/purchase-orders/PurchaseOrderDetailPage";
+import CreatePurchaseOrderPage from "@/pages/purchase-orders/CreatePurchaseOrderPage";
 
 import NotFound from "@/pages/NotFound";
 import LoginPage from "@/pages/auth/LoginPage";
+import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 
 import RequireAuth from "@/auth/RequireAuth";
 import RequireAdmin from "@/auth/RequireAdmin";
@@ -32,6 +38,16 @@ export function AppRoutes() {
             <Route
                 path="/login"
                 element={<LoginPage />}
+            />
+
+            <Route
+                path="/forgot-password"
+                element={<ForgotPasswordPage />}
+            />
+
+            <Route
+                path="/reset-password"
+                element={<ResetPasswordPage />}
             />
 
             {/* Protected application */}
@@ -58,6 +74,21 @@ export function AppRoutes() {
                     <Route
                         path="/orders/:id"
                         element={<WorkshopOrderDetail />}
+                    />
+
+                    <Route
+                        path="/purchase-orders"
+                        element={<PurchaseOrdersPage />}
+                    />
+
+                    <Route
+                        path="/purchase-orders/new"
+                        element={<CreatePurchaseOrderPage />}
+                    />
+
+                    <Route
+                        path="/purchase-orders/:id"
+                        element={<PurchaseOrderDetailPage />}
                     />
 
                     <Route
@@ -101,6 +132,11 @@ export function AppRoutes() {
                         <Route
                             path="/settings/branding-locations"
                             element={<BrandingLocationsPage />}
+                        />
+
+                        <Route
+                            path="/settings/suppliers"
+                            element={<SuppliersPage />}
                         />
                     </Route>
                 </Route>
