@@ -10,10 +10,17 @@ import type {
     CreatePoItemRequest,
     UpdatePoItemRequest,
     PoLineItem,
+    PoLineItemDetail,
     CreatePoLineItemRequest,
     UpdatePoLineItemRequest,
     PoItemNote,
     CreatePoItemNoteRequest,
+    PoProcurementEvent,
+    PoReceiptDetail,
+    CreatePoReceiptRequest,
+    PoDefect,
+    CreatePoDefectRequest,
+    ResolvePoDefectRequest,
 } from "@/types/purchaseOrder";
 
 // --------------------------------------------------
@@ -193,6 +200,17 @@ export async function updatePoLineItem(
     return response.data;
 }
 
+export async function getPoLineItem(
+    id: number,
+): Promise<PoLineItemDetail> {
+
+    const response = await api.get<PoLineItemDetail>(
+        `/po-line-items/${id}`,
+    );
+
+    return response.data;
+}
+
 // --------------------------------------------------
 // PO Item Notes
 // --------------------------------------------------
@@ -216,6 +234,86 @@ export async function getPoItemNotes(
 
     const response = await api.get<PoItemNote[]>(
         `/po-items/${poItemId}/notes`,
+    );
+
+    return response.data;
+}
+
+export async function getPoProcurementTimeline(
+    poItemId: number,
+): Promise<PoProcurementEvent[]> {
+
+    const response = await api.get<PoProcurementEvent[]>(
+        `/po-items/${poItemId}/procurement-timeline`,
+    );
+
+    return response.data;
+}
+
+// --------------------------------------------------
+// PO Receipts
+// --------------------------------------------------
+
+export async function getPoReceipts(
+    purchaseOrderId: number,
+): Promise<PoReceiptDetail[]> {
+
+    const response = await api.get<PoReceiptDetail[]>(
+        `/purchase-orders/${purchaseOrderId}/receipts`,
+    );
+
+    return response.data;
+}
+
+export async function recordPoReceipt(
+    purchaseOrderId: number,
+    payload: CreatePoReceiptRequest,
+): Promise<PoReceiptDetail> {
+
+    const response = await api.post<PoReceiptDetail>(
+        `/purchase-orders/${purchaseOrderId}/receipts`,
+        payload,
+    );
+
+    return response.data;
+}
+
+// --------------------------------------------------
+// PO Defects
+// --------------------------------------------------
+
+export async function getPoDefects(
+    poLineItemId: number,
+): Promise<PoDefect[]> {
+
+    const response = await api.get<PoDefect[]>(
+        `/po-line-items/${poLineItemId}/defects`,
+    );
+
+    return response.data;
+}
+
+export async function reportPoDefect(
+    poLineItemId: number,
+    payload: CreatePoDefectRequest,
+): Promise<PoDefect> {
+
+    const response = await api.post<PoDefect>(
+        `/po-line-items/${poLineItemId}/defects`,
+        payload,
+    );
+
+    return response.data;
+}
+
+export async function resolvePoDefect(
+    defectId: number,
+    payload: ResolvePoDefectRequest,
+): Promise<PoDefect> {
+
+    const response = await api.patch<PoDefect>(
+        `/po-defects/${defectId}/resolve`,
+        payload,
     );
 
     return response.data;

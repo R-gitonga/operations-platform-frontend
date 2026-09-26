@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 
 import { usePurchaseOrder } from "@/hooks/usePurchaseOrders";
 import PurchaseOrderInformationCard from "@/components/purchase-orders/PurchaseOrderInformationCard";
+import PoReceiptsCard from "@/components/purchase-orders/PoReceiptsCard";
 import PoItemSection from "@/components/purchase-orders/PoItemSection";
 
 export default function PurchaseOrderDetailPage() {
@@ -28,6 +29,8 @@ export default function PurchaseOrderDetailPage() {
     return (
         <div className="space-y-8">
             <PurchaseOrderInformationCard order={order} />
+
+            <PoReceiptsCard order={order} />
 
             {order.items.map((item) => (
                 <PoItemSection

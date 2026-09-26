@@ -8,6 +8,7 @@ import EditPurchaseOrderDialog from "./EditPurchaseOrderDialog";
 import CancelPurchaseOrderDialog from "./CancelPurchaseOrderDialog";
 import ReactivatePurchaseOrderDialog from "./ReactivatePurchaseOrderDialog";
 import UploadPurchaseOrderAttachment from "./UploadPurchaseOrderAttachment";
+import ReceiveDeliveryDialog from "./ReceiveDeliveryDialog";
 
 interface Props {
     order: PurchaseOrderDetail;
@@ -23,6 +24,9 @@ function DetailRow({ label, value }: { label: string; value: React.ReactNode }) 
 }
 
 export default function PurchaseOrderInformationCard({ order }: Props) {
+    // status is the raw persisted flag (only ever 'active'/'cancelled')
+    // -- used here purely to gate which actions are shown.
+    // derived_status is the computed label shown to the user.
     const isCancelled = order.status.toLowerCase() === "cancelled";
 
     return (
@@ -32,12 +36,13 @@ export default function PurchaseOrderInformationCard({ order }: Props) {
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                             <h2 className="text-xl font-semibold">Purchase Order</h2>
-                            <StatusBadge status={order.status} />
+                            <StatusBadge status={order.derived_status} />
                         </div>
 
                         <div className="flex gap-2">
                             {!isCancelled && (
                                 <>
+                                    <ReceiveDeliveryDialog order={order} />
                                     <UploadPurchaseOrderAttachment
                                         purchaseOrderId={order.id}
                                     />
@@ -67,6 +72,10 @@ export default function PurchaseOrderInformationCard({ order }: Props) {
                 <DetailRow label="Description" value={order.description} />
                 <DetailRow label="Items" value={order.total_items} />
                 <DetailRow label="Quantity Ordered" value={order.total_qty_ordered} />
+                <DetailRow label="Quantity Delivered" value={order.total_qty_delivered} />
+                <DetailRow label="Quantity Accepted" value={order.total_qty_accepted} />
+                <DetailRow label="Quantity Defective" value={order.total_qty_defective} />
+                <DetailRow label="Outstanding" value={order.total_outstanding} />
                 <DetailRow label="Created By" value={order.created_by} />
                 <DetailRow
                     label="Created On"

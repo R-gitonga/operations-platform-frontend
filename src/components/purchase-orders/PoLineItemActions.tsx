@@ -18,10 +18,6 @@ interface Props {
     purchaseOrderId: number;
 }
 
-// Only "Edit" exists for now. "Receive Stock" will be added here
-// once po_receipts/po_receipt_lines exist — kept as a dropdown
-// (rather than a bare button) so that addition doesn't require
-// restructuring this component or its callers.
 export default function PoLineItemActions({
     item,
     purchaseOrderId,

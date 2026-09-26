@@ -3,6 +3,7 @@ import {
     ClipboardList,
     FilePlus2,
     ShoppingCart,
+    BarChart3,
     Settings,
 } from "lucide-react";
 
@@ -31,6 +32,11 @@ export const navigation = [
         title: "New Purchase Order",
         url: "/purchase-orders/new",
         icon: FilePlus2,
+    },
+    {
+        title: "PO Dashboard",
+        url: "/purchase-orders/dashboard",
+        icon: BarChart3,
     },
     {
         title: "Settings",

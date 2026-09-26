@@ -21,6 +21,7 @@ import SuppliersPage from "@/pages/settings/SuppliersPage";
 import PurchaseOrdersPage from "@/pages/purchase-orders/PurchaseOrdersPage";
 import PurchaseOrderDetailPage from "@/pages/purchase-orders/PurchaseOrderDetailPage";
 import CreatePurchaseOrderPage from "@/pages/purchase-orders/CreatePurchaseOrderPage";
+import PurchaseOrderDashboardPage from "@/pages/purchase-orders/PurchaseOrderDashboardPage";
 
 import NotFound from "@/pages/NotFound";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -84,6 +85,13 @@ export function AppRoutes() {
                     <Route
                         path="/purchase-orders/new"
                         element={<CreatePurchaseOrderPage />}
+                    />
+
+                    {/* Registered before /purchase-orders/:id so
+                        "dashboard" isn't swallowed as an :id param. */}
+                    <Route
+                        path="/purchase-orders/dashboard"
+                        element={<PurchaseOrderDashboardPage />}
                     />
 
                     <Route

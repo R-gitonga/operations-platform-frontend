@@ -19,6 +19,7 @@ import { useCategories } from "@/hooks/useCategories";
 import type { PoItemDetail } from "@/types/purchaseOrder";
 
 import PoLineItemActions from "./PoLineItemActions";
+import PoLineItemDefectsDialog from "./PoLineItemDefectsDialog";
 import AddPoLineItemDialog from "./AddPoLineItemDialog";
 
 interface Props {
@@ -100,15 +101,17 @@ export default function PoLineItemsTable({
 
                             <TableHead>Size</TableHead>
 
-                            {/*
-                                Received / Outstanding columns will
-                                be added once po_receipts exist —
-                                deliberately not shown as
-                                placeholder zeros until then.
-                            */}
                             <TableHead>Ordered</TableHead>
 
-                            <TableHead>Actions</TableHead>
+                            <TableHead>Delivered</TableHead>
+
+                            <TableHead>Accepted</TableHead>
+
+                            <TableHead>Defective</TableHead>
+
+                            <TableHead>Outstanding</TableHead>
+
+                            <TableHead className="text-right">Actions</TableHead>
 
                         </TableRow>
 
@@ -120,7 +123,7 @@ export default function PoLineItemsTable({
 
                             <TableRow>
                                 <TableCell
-                                    colSpan={3}
+                                    colSpan={7}
                                     className="text-center text-muted-foreground"
                                 >
                                     No sizes added.
@@ -137,14 +140,39 @@ export default function PoLineItemsTable({
 
                                     <TableCell>{line.qty_ordered}</TableCell>
 
+                                    <TableCell>{line.total_delivered}</TableCell>
+
+                                    <TableCell>{line.total_accepted}</TableCell>
+
+                                    <TableCell>
+                                        {line.total_defective > 0 ? (
+                                            <span className="font-medium text-red-600">
+                                                {line.total_defective}
+                                            </span>
+                                        ) : (
+                                            0
+                                        )}
+                                    </TableCell>
+
+                                    <TableCell>{line.outstanding}</TableCell>
+
                                     <TableCell>
 
-                                        {!isLocked && (
-                                            <PoLineItemActions
-                                                item={line}
+                                        <div className="flex items-center justify-end gap-2">
+
+                                            <PoLineItemDefectsDialog
+                                                line={line}
                                                 purchaseOrderId={purchaseOrderId}
                                             />
-                                        )}
+
+                                            {!isLocked && (
+                                                <PoLineItemActions
+                                                    item={line}
+                                                    purchaseOrderId={purchaseOrderId}
+                                                />
+                                            )}
+
+                                        </div>
 
                                     </TableCell>
 

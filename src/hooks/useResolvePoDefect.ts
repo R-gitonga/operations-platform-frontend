@@ -1,27 +1,28 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { addPoItemNote } from "@/api/purchaseOrders";
+import { resolvePoDefect } from "@/api/purchaseOrders";
 import { getApiErrorMessage } from "@/lib/apiError";
 
-import type { CreatePoItemNoteRequest } from "@/types/purchaseOrder";
+import type { ResolvePoDefectRequest } from "@/types/purchaseOrder";
 
-interface AddPoItemNoteVariables {
-    poItemId: number;
+interface ResolvePoDefectVariables {
+    defectId: number;
+    poLineItemId: number;
     purchaseOrderId: number;
-    payload: CreatePoItemNoteRequest;
+    payload: ResolvePoDefectRequest;
 }
 
-export function useAddPoItemNote() {
+export function useResolvePoDefect() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ poItemId, payload }: AddPoItemNoteVariables) =>
-            addPoItemNote(poItemId, payload),
+        mutationFn: ({ defectId, payload }: ResolvePoDefectVariables) =>
+            resolvePoDefect(defectId, payload),
 
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
-                queryKey: ["po-item-notes", variables.poItemId],
+                queryKey: ["po-defects", variables.poLineItemId],
             });
 
             queryClient.invalidateQueries({
@@ -29,10 +30,10 @@ export function useAddPoItemNote() {
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["po-procurement-timeline", variables.poItemId],
+                queryKey: ["po-procurement-timeline"],
             });
 
-            toast.success("Note added.");
+            toast.success("Defect resolved.");
         },
 
         onError: (error) => {
