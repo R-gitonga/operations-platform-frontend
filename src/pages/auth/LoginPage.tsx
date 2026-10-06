@@ -166,6 +166,13 @@ export default function LoginPage() {
                                 : "Sign in"}
                         </Button>
                     </form>
+
+                    <Link
+                        to="/setup"
+                        className="mt-4 block text-center text-sm text-slate-500 hover:underline"
+                    >
+                        Setting this up for the first time? Create an admin account
+                    </Link>
                 </CardContent>
             </Card>
         </main>

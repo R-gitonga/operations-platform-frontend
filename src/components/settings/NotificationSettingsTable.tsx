@@ -23,6 +23,11 @@ interface Props {
   settings: NotificationSetting[];
 }
 
+const MODULE_LABELS: Record<string, string> = {
+  wso: "Workshop Orders",
+  po: "Purchase Orders",
+};
+
 export default function NotificationSettingsTable({ settings }: Props) {
   const mutation = useUpdateNotificationSetting();
 
@@ -91,96 +96,107 @@ export default function NotificationSettingsTable({ settings }: Props) {
     );
   };
 
+  const groups = Array.from(
+    settings.reduce((map, setting) => {
+      const list = map.get(setting.module) ?? [];
+      list.push(setting);
+      map.set(setting.module, list);
+      return map;
+    }, new Map<string, NotificationSetting[]>()),
+  );
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Notification Behaviour</CardTitle>
       </CardHeader>
 
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Event</TableHead>
+      <CardContent className="space-y-8">
+        {groups.map(([module, moduleSettings]) => (
+          <div key={module} className="space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+              {MODULE_LABELS[module] ?? module}
+            </h3>
 
-              <TableHead>Enabled</TableHead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Event</TableHead>
+                  <TableHead>Enabled</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>In-App</TableHead>
+                  <TableHead className="w-28">Status</TableHead>
+                </TableRow>
+              </TableHeader>
 
-              <TableHead>Email</TableHead>
-
-              <TableHead>In-App</TableHead>
-              <TableHead className="w-28">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {settings.map((setting) => (
-              <TableRow
-                key={setting.id}
-                className={
-                  updatingId === setting.id
-                    ? "opacity-60 transition-opacity"
-                    : ""
-                }
-              >
-                <TableCell>
-                  <div>
-                    <p className="font-medium">{setting.display_name}</p>
-
-                    <p className="text-xs text-slate-500">
-                      {setting.description}
-                    </p>
-                  </div>
-                </TableCell>
-
-                <TableCell>
-                  <Switch
-                    checked={setting.enabled}
-                    disabled={updatingId === setting.id}
-                    onCheckedChange={(checked) =>
-                      updateSetting(
-                        setting.id,
-                        {
-                          enabled: setting.enabled,
-                          email_enabled: setting.email_enabled,
-                          in_app_enabled: setting.in_app_enabled,
-                        },
-                        {
-                          enabled: checked,
-                        },
-                      )
+              <TableBody>
+                {moduleSettings.map((setting) => (
+                  <TableRow
+                    key={setting.id}
+                    className={
+                      updatingId === setting.id
+                        ? "opacity-60 transition-opacity"
+                        : ""
                     }
-                  />
-                </TableCell>
+                  >
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">{setting.display_name}</p>
 
-                <TableCell>{renderDeliverySwitch(setting, "email")}</TableCell>
+                        <p className="text-xs text-slate-500">
+                          {setting.description}
+                        </p>
+                      </div>
+                    </TableCell>
 
-                <TableCell>{renderDeliverySwitch(setting, "in_app")}</TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={setting.enabled}
+                        disabled={updatingId === setting.id}
+                        onCheckedChange={(checked) =>
+                          updateSetting(
+                            setting.id,
+                            {
+                              enabled: setting.enabled,
+                              email_enabled: setting.email_enabled,
+                              in_app_enabled: setting.in_app_enabled,
+                            },
+                            {
+                              enabled: checked,
+                            },
+                          )
+                        }
+                      />
+                    </TableCell>
 
-                <TableCell>
-                  {updatingId === setting.id ? (
-                    <div className="flex items-center gap-2 text-sky-600">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <TableCell>{renderDeliverySwitch(setting, "email")}</TableCell>
 
-                      <span className="text-sm font-medium">Saving...</span>
-                    </div>
-                  ) : setting.enabled ? (
-                    <div className="flex items-center gap-2 text-emerald-600">
-                      <CheckCircle2 className="h-4 w-4" />
+                    <TableCell>{renderDeliverySwitch(setting, "in_app")}</TableCell>
 
-                      <span className="text-sm">Active</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-slate-500">
-                      <CircleOff className="h-4 w-4" />
-
-                      <span className="text-sm">Disabled</span>
-                    </div>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                    <TableCell>
+                      {updatingId === setting.id ? (
+                        <div className="flex items-center gap-2 text-sky-600">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="text-sm font-medium">Saving...</span>
+                        </div>
+                      ) : setting.enabled ? (
+                        <div className="flex items-center gap-2 text-emerald-600">
+                          <CheckCircle2 className="h-4 w-4" />
+                          <span className="text-sm">Active</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-slate-500">
+                          <CircleOff className="h-4 w-4" />
+                          <span className="text-sm">Disabled</span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );

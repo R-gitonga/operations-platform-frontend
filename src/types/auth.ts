@@ -18,3 +18,9 @@ export interface ResetPasswordRequest {
     token: string;
     password: string;
 }
+
+export interface BootstrapAdminRequest {
+    name: string;
+    email: string;
+    password: string;
+}

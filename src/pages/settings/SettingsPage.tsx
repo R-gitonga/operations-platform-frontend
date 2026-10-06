@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PartialReceivingSettingsCard from "@/components/dashboard/PartialReceivingSettingsCard";
+import PoAlertSettingsCard from "@/components/settings/PoAlertSettingsCard";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ export default function SettingsPage() {
 
               <CardDescription>
                 Choose which notification events are active and whether they are
-                sent by email or in-app.
+                sent by email or in-app, across Workshop Orders and Purchase Orders.
               </CardDescription>
             </CardHeader>
 
@@ -165,6 +166,24 @@ export default function SettingsPage() {
 
               <CardContent>
                 <PartialReceivingSettingsCard />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Truck className="h-5 w-5" />
+                  Purchase Order Alerts
+                </CardTitle>
+
+                <CardDescription>
+                  Overdue, approaching, stalled and unresolved-defect
+                  thresholds for the Purchase Order alert worker.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <PoAlertSettingsCard />
               </CardContent>
             </Card>
 

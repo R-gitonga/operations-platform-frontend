@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
 import type {
+    BootstrapAdminRequest,
     ForgotPasswordRequest,
     LoginRequest,
     LoginResponse,
@@ -39,4 +40,15 @@ export async function resetPassword(
     request: ResetPasswordRequest,
 ): Promise<void> {
     await api.post("/auth/reset-password", request);
+}
+
+export async function bootstrapAdmin(
+    request: BootstrapAdminRequest,
+): Promise<{ message: string }> {
+    const response = await api.post<{ message: string }>(
+        "/auth/bootstrap-admin",
+        request,
+    );
+
+    return response.data;
 }

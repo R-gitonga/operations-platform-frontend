@@ -7,6 +7,8 @@ export interface NotificationSetting {
 
     description: string | null;
 
+    module: string;
+
     enabled: boolean;
 
     email_enabled: boolean;
@@ -44,6 +46,8 @@ export interface NotificationEvent {
     display_name: string;
 
     description: string;
+
+    module: string;
 }
 
 export interface CreateNotificationRecipientRequest {
