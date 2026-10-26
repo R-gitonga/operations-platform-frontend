@@ -1,5 +1,4 @@
 import type {
-    CreateWsoLineItemRequest,
     WsoLineItem,
 } from "./lineItem";
 import type { ProductionItemFormData } from "./productionItemForm";

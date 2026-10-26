@@ -68,6 +68,9 @@ export default function NotificationSettingsTable({ settings }: Props) {
     setting: NotificationSetting,
     type: "email" | "in_app",
   ) => {
+    if (type === "in_app") {
+      return <span className="text-sm text-slate-500" title="In-app notifications are deferred">Deferred</span>;
+    }
     if (!setting.enabled) {
       return <span className="text-slate-400 text-lg">&mdash;</span>;
     }

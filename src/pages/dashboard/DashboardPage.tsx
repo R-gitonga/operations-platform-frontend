@@ -20,7 +20,6 @@ import ProductionStageCards from "@/components/dashboard/ProductionStageCards";
 import ProgressStat from "@/components/dashboard/ProgressStat";
 import AttentionRequired from "@/components/dashboard/AttentionRequired";
 import PartialReceivingAttention from "@/components/dashboard/PartialReceivingAttention";
-import PartialReceivingSettingsCard from "@/components/dashboard/PartialReceivingSettingsCard";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
