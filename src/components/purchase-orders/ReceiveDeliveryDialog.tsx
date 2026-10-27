@@ -208,7 +208,7 @@ export default function ReceiveDeliveryDialog({ order, trigger }: Props) {
 
                         <Button
                             onClick={handleSave}
-                            disabled={mutation.isPending || lines.length === 0}
+                            disabled={mutation.isPending || lines.length === 0 || Object.entries(quantities).some(([id, qty]) => !Number.isInteger(qty) || qty < 0 || qty > (receivableLines.find(line => line.lineItemId === Number(id))?.maxDeliverable ?? 0))}
                         >
                             {mutation.isPending ? "Saving" : "Record Delivery"}
                         </Button>

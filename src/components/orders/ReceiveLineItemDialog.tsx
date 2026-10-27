@@ -45,6 +45,7 @@ export default function ReceiveLineItemDialog({
         onSuccess: () => {
           toast.success("Stock received successfully.");
           setOpen(false);
+          setQuantity(0);
         },
 
         onError: (error) => {
@@ -101,7 +102,7 @@ export default function ReceiveLineItemDialog({
 
             <Button
               onClick={handleReceive}
-              disabled={quantity <= 0 || quantity > item.balance}
+              disabled={receiveMutation.isPending || !Number.isInteger(quantity) || quantity <= 0 || quantity > item.balance}
             >
               Receive Stock
             </Button>
