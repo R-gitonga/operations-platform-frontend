@@ -31,6 +31,7 @@ export default function SettingsPage() {
         </p>
       </div>
 
+      {isAdmin && <Card><CardHeader><CardTitle>Branches</CardTitle><CardDescription>Configure branches for paid orders and follow-up reporting.</CardDescription></CardHeader><CardContent><Button onClick={() => navigate("/settings/branches")}>Manage branches</Button></CardContent></Card>}
       {/* ----------------------------------------- */}
       {/* Production */}
       {/* ----------------------------------------- */}

@@ -7,6 +7,8 @@ import type {
 } from "./branding";
 
 export interface WsoOrder {
+    is_paid_order?: boolean;
+    branch_id?: number | null;
     id: number;
 
     date_signed: string | null;
@@ -27,6 +29,8 @@ export interface WsoOrder {
 }
 
 export interface WsoDetail {
+    is_paid_order?: boolean;
+    branch_id?: number | null;
     id: number;
 
     date_signed: string | null;
@@ -53,6 +57,7 @@ export interface WsoDetail {
 }
 
 export interface WsoItemDetail {
+    paid_order_reason?: "mtm" | "stock_out" | null;
     id: number;
 
     category_id: number | null;
@@ -92,6 +97,8 @@ export interface WsoItemDetail {
 
 
 export interface CreateCompleteWsoRequest {
+    is_paid_order?: boolean;
+    branch_id?: number | null;
     date_signed?: string;
 
     wso_number: string;

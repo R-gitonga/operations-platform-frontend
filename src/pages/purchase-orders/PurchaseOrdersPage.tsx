@@ -38,10 +38,12 @@ export default function PurchaseOrdersPage() {
     const [search, setSearch] = useState(initialSearch);
 
     const [status, setStatus] = useState(initialStatus);
+    const [classification, setClassification] = useState(searchParams.get("classification") ?? "bulk");
 
     useEffect(() => {
 
         const params = new URLSearchParams();
+        params.set("classification", classification);
 
         if (search.trim() !== "") {
             params.set("search", search);
@@ -52,9 +54,9 @@ export default function PurchaseOrdersPage() {
         }
 
         setSearchParams(params);
-    }, [search, status, setSearchParams]);
+    }, [search, status, classification, setSearchParams]);
 
-    const { data, isLoading, error } = usePurchaseOrders(search, status);
+    const { data, isLoading, error } = usePurchaseOrders(search, status, classification);
 
     if (isLoading) {
         return <p>Loading purchase orders...</p>;
@@ -80,6 +82,7 @@ export default function PurchaseOrdersPage() {
 
             </div>
 
+            <label className="flex items-center gap-3">Order classification<select className="rounded border p-2" value={classification} onChange={e => setClassification(e.target.value)}><option value="bulk">Bulk orders</option><option value="paid">Paid orders</option><option value="all">All orders</option></select></label>
             <Card>
 
                 <CardHeader>
@@ -223,6 +226,7 @@ export default function PurchaseOrdersPage() {
                                         <td className="py-4 font-medium">
 
                                             {order.erp_reference}
+                                            {order.is_paid_order && <span className="ml-2 rounded bg-sky-50 px-2 py-1 text-xs text-sky-800">Paid order</span>}
 
                                         </td>
 

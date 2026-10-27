@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { reasonLabel } from "@/api/paidOrders";
 
 import {
     Accordion,
@@ -32,6 +33,7 @@ export default function PoItemSection({
                     <AccordionTrigger className="px-6 py-5 hover:no-underline">
                         <div className="w-full pr-4 text-left">
                             <PoItemHeader item={item} />
+                            {item.paid_order_reason && <p className="mt-2 text-sm font-medium text-sky-700">{reasonLabel(item.paid_order_reason)}</p>}
                         </div>
                     </AccordionTrigger>
 

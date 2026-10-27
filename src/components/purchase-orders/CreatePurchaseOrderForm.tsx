@@ -1,3 +1,4 @@
+import { PaidOrderFields, ItemReasonField } from "@/components/paid-orders/PaidOrderFields";
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -25,6 +26,7 @@ import type {
 } from "@/types/purchaseOrder";
 
 interface PurchaseOrderItemFormData {
+    paid_order_reason?: "mtm" | "stock_out" | null;
     categoryId: number | null;
     description: string;
     expectedDeliveryDate: string;
@@ -48,6 +50,8 @@ function createItem(): PurchaseOrderItemFormData {
 
 export default function CreatePurchaseOrderForm() {
     const navigate = useNavigate();
+    const [paid, setPaid] = useState(false);
+    const [branch, setBranch] = useState<number | null>(null);
     const { data: suppliers = [] } = useSuppliers();
     const { data: categories = [] } = useCategories();
     const { data: brandingTypes = [] } = useBrandingTypes();
@@ -98,11 +102,13 @@ export default function CreatePurchaseOrderForm() {
         }
 
         const payload: CreatePurchaseOrderRequest = {
+            is_paid_order: paid, branch_id: paid ? branch : null,
             erp_reference: erpReference.trim(),
             accounts_reference: accountsReference.trim(),
             supplier_id: supplierId,
             description: description.trim() || null,
             items: items.map((item): CreatePoItemRequest => ({
+                paid_order_reason: paid ? item.paid_order_reason : null,
                 category_id: item.categoryId,
                 description: item.description.trim() || null,
                 expected_delivery_date: item.expectedDeliveryDate || null,
@@ -134,7 +140,7 @@ export default function CreatePurchaseOrderForm() {
         accountsReference.trim() !== "" &&
         supplierId !== null &&
         items.length > 0 &&
-        hasValidItems;
+        hasValidItems && (!paid || (branch !== null && items.every(i => !!i.paid_order_reason)));
 
     return (
         <form className="space-y-8" onSubmit={handleSubmit}>
@@ -187,6 +193,7 @@ export default function CreatePurchaseOrderForm() {
                 </CardContent>
             </Card>
 
+            <PaidOrderFields paid={paid} branch={branch} onChange={(value,id) => {setPaid(value); setBranch(id); if (!value) setItems(items.map(i => ({...i,paid_order_reason:null})));}} />
             {items.map((item, itemIndex) => (
                 <Card key={itemIndex}>
                     <CardHeader className="flex flex-row items-center justify-between gap-4">
@@ -202,6 +209,7 @@ export default function CreatePurchaseOrderForm() {
                         )}
                     </CardHeader>
                     <CardContent className="space-y-6">
+                        {paid && <ItemReasonField value={item.paid_order_reason} onChange={reason => updateItem(itemIndex,{paid_order_reason:reason})} />}
                         <div className="grid gap-6 md:grid-cols-2">
                             <div className="space-y-2">
                                 <Label>Category</Label>

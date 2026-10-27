@@ -55,7 +55,7 @@ export default function Dashboard() {
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
 
-        <p className="text-slate-500">Workshop Operations Overview</p>
+        <p className="text-slate-500">Workshop Operations Overview · All bulk and paid orders</p>
       </div>
 
       {/* ========================================= */}

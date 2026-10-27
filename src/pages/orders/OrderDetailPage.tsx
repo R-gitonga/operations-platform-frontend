@@ -1,3 +1,4 @@
+import ClassificationCard from "@/components/paid-orders/ClassificationCard";
 import { useParams } from "react-router-dom";
 
 import { useWso } from "@/hooks/usewso";
@@ -26,6 +27,7 @@ export default function WorkshopOrderDetail() {
 
   return (
     <div className="space-y-8">
+      <ClassificationCard kind="wso" id={order.id} cancelled={order.status === "cancelled"} />
       <OrderInformationCard order={order} />
 
       {order.items.map((item) => (

@@ -20,9 +20,11 @@ import type {
 export async function getWsos(
     search?: string,
     status?: string,
+    classification?: string,
 ): Promise<WsoOrder[]> {
 
     const params = new URLSearchParams();
+    if (classification) params.set("classification", classification);
 
     if (search?.trim()) {
         params.append("search", search);

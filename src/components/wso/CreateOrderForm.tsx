@@ -1,3 +1,4 @@
+import { PaidOrderFields, ItemReasonField } from "@/components/paid-orders/PaidOrderFields";
 import { useNavigate } from "react-router-dom";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -18,6 +19,8 @@ import type { ProductionItemFormData } from "@/types/productionItemForm";
 
 export default function WsoForm() {
   const navigate = useNavigate();
+  const [paid, setPaid] = useState(false);
+  const [branch, setBranch] = useState<number | null>(null);
 
   const { data: categories } = useCategories();
 
@@ -82,11 +85,13 @@ export default function WsoForm() {
     e.preventDefault();
 
     const payload: CreateCompleteWsoRequest = {
+      is_paid_order: paid, branch_id: paid ? branch : null,
       date_signed: header.date_signed || undefined,
       wso_number: header.wso_number,
       req_number: header.req_number || undefined,
 
       items: items.map((item) => ({
+        paid_order_reason: paid ? item.paid_order_reason : null,
         category_id: item.category_id!,
         description: item.description,
         design_code: item.design_code,
@@ -99,9 +104,9 @@ export default function WsoForm() {
     };
 
     createMutation.mutate(payload, {
-      onSuccess: () => {
+      onSuccess: (order) => {
         toast.success("Workshop Order created successfully.");
-        navigate("/orders");
+        navigate(paid ? `/orders/${order.id}` : "/orders");
       },
 
       onError: (error) => {
@@ -113,6 +118,7 @@ export default function WsoForm() {
   return (
     <form className="space-y-8" onSubmit={handleSubmit}>
       <WsoHeaderForm header={header} setHeader={setHeader} />
+      <PaidOrderFields paid={paid} branch={branch} onChange={(value, id) => { setPaid(value); setBranch(id); if (!value) setItems(items.map(i => ({...i, paid_order_reason: null}))); }} />
 
       {items.map((item, index) => (
         <div key={index} className="space-y-4 rounded-lg border p-4">
@@ -132,6 +138,7 @@ export default function WsoForm() {
             )}
           </div>
 
+          {paid && <ItemReasonField value={item.paid_order_reason} onChange={reason => updateItem(index, {...item, paid_order_reason: reason})} />}
           <ProductionItemForm
             item={item}
             onChange={(updated) => updateItem(index, updated)}

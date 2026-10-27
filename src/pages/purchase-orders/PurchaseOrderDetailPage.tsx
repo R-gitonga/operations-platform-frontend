@@ -1,3 +1,4 @@
+import ClassificationCard from "@/components/paid-orders/ClassificationCard";
 import { useParams } from "react-router-dom";
 
 import { usePurchaseOrder } from "@/hooks/usePurchaseOrders";
@@ -28,6 +29,7 @@ export default function PurchaseOrderDetailPage() {
 
     return (
         <div className="space-y-8">
+      <ClassificationCard kind="po" id={order.id} cancelled={order.status === "cancelled"} />
             <PurchaseOrderInformationCard order={order} />
 
             <PoReceiptsCard order={order} />

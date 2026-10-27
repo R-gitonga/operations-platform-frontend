@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 export const navigation = [
+    { title: "Paid Orders", url: "/paid-orders", icon: ClipboardList },
     {
         title: "Dashboard",
         url: "/",

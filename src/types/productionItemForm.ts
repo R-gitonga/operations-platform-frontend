@@ -7,6 +7,7 @@ export interface ProductionItemBrandingFormData {
 }
 
 export interface ProductionItemFormData {
+    paid_order_reason?: "mtm" | "stock_out" | null;
     category_id?: number;
     description: string;
     design_code: string;

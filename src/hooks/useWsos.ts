@@ -5,15 +5,16 @@ import { getWsos } from "@/api/wso";
 export function useWsos(
     search?: string,
     status?: string,
+    classification?: string,
 ) {
     return useQuery({
         queryKey: [
             "wsos",
             search,
-            status,
+            status, classification,
         ],
 
         queryFn: () =>
-                getWsos(search, status),
+                getWsos(search, status, classification),
     });
 }

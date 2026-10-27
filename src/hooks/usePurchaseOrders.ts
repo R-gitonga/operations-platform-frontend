@@ -5,15 +5,16 @@ import { getPurchaseOrders, getPurchaseOrder } from "@/api/purchaseOrders";
 export function usePurchaseOrders(
     search?: string,
     status?: string,
+    classification?: string,
 ) {
     return useQuery({
         queryKey: [
             "purchase-orders",
             search,
-            status,
+            status, classification,
         ],
 
-        queryFn: () => getPurchaseOrders(search, status),
+        queryFn: () => getPurchaseOrders(search, status, classification),
     });
 }
 

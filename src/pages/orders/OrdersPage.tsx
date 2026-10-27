@@ -48,6 +48,7 @@ export default function OrdersPage() {
     const [search, setSearch] = useState(initialSearch);
 
     const [status, setStatus] = useState(initialStatus);
+    const [classification, setClassification] = useState(searchParams.get("classification") ?? "bulk");
 
     const { data: categories } = useCategories();
 
@@ -70,6 +71,7 @@ export default function OrdersPage() {
     useEffect(() => {
 
         const params = new URLSearchParams();
+        params.set("classification", classification);
 
         if (search.trim() !== "") {
             params.set("search", search);
@@ -80,9 +82,9 @@ export default function OrdersPage() {
         }
 
         setSearchParams(params);
-    }, [search, status, setSearchParams]);
+    }, [search, status, classification, setSearchParams]);
 
-    const {data, isLoading, error,} = useWsos(search, status);
+    const {data, isLoading, error,} = useWsos(search, status, classification);
 
     if (isLoading) {
         return <p>Loading orders...</p>
@@ -110,6 +112,7 @@ export default function OrdersPage() {
 
             </div>
 
+            <label className="flex items-center gap-3">Order classification<select className="rounded border p-2" value={classification} onChange={e => setClassification(e.target.value)}><option value="bulk">Bulk orders</option><option value="paid">Paid orders</option><option value="all">All orders</option></select></label>
             <Card>
 
                 <CardHeader>
@@ -281,6 +284,7 @@ export default function OrdersPage() {
                                         <td className="py-4 font-medium">
 
                                             {order.wso_number}
+                                            {order.is_paid_order && <span className="ml-2 rounded bg-sky-50 px-2 py-1 text-xs text-sky-800">Paid order</span>}
 
                                         </td>
 

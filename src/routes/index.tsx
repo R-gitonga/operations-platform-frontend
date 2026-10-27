@@ -1,3 +1,5 @@
+import PaidOrdersPage from "@/pages/paid-orders/PaidOrdersPage";
+import BranchesPage from "@/pages/settings/BranchesPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import MainLayout from "@/layouts/MainLayout";
@@ -61,6 +63,7 @@ export function AppRoutes() {
 
             <Route element={<RequireAuth />}>
                 <Route element={<MainLayout />}>
+                    <Route path="/paid-orders" element={<PaidOrdersPage />} />
                     {/* General authenticated routes */}
 
                     <Route
@@ -131,6 +134,7 @@ export function AppRoutes() {
                     {/* Admin-only routes */}
 
                     <Route element={<RequireAdmin />}>
+                        <Route path="/settings/branches" element={<BranchesPage />} />
                         <Route
                             path="/settings/users"
                             element={<UserManagementPage />}

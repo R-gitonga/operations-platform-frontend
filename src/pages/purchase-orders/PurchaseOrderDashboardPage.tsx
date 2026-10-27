@@ -49,7 +49,7 @@ export default function PurchaseOrderDashboardPage() {
             <div>
                 <h1 className="text-3xl font-bold">Purchase Order Dashboard</h1>
 
-                <p className="text-slate-500">Supplier Procurement Overview</p>
+                <p className="text-slate-500">Supplier Procurement Overview · All bulk and paid orders</p>
             </div>
 
             {/* ========================================= */}

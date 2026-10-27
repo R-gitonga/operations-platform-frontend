@@ -1,4 +1,6 @@
 export interface PurchaseOrder {
+    is_paid_order?: boolean;
+    branch_id?: number | null;
     id: number;
 
     erp_reference: string;
@@ -166,6 +168,7 @@ export interface CreatePoItemNoteRequest {
 }
 
 export interface PoItem {
+    paid_order_reason?: "mtm" | "stock_out" | null;
     id: number;
 
     purchase_order_id: number;
@@ -196,6 +199,7 @@ export interface PoItem {
 // Used both standalone (adding an item to an existing PO) and
 // nested inside CreatePurchaseOrderRequest.
 export interface CreatePoItemRequest {
+    paid_order_reason?: "mtm" | "stock_out" | null;
     category_id: number | null;
     description: string | null;
     expected_delivery_date: string | null;
@@ -215,6 +219,7 @@ export interface UpdatePoItemRequest {
 }
 
 export interface PoItemDetail {
+    paid_order_reason?: "mtm" | "stock_out" | null;
     id: number;
 
     purchase_order_id: number;
@@ -251,6 +256,8 @@ export interface PoItemDetail {
 }
 
 export interface CreatePurchaseOrderRequest {
+    is_paid_order?: boolean;
+    branch_id?: number | null;
     erp_reference: string;
 
     accounts_reference: string;
@@ -267,6 +274,8 @@ export interface CreatePurchaseOrderRequest {
 // derived_status is the computed display label
 // ('active'/'partial'/'completed'/'cancelled').
 export interface PurchaseOrderDetail {
+    is_paid_order?: boolean;
+    branch_id?: number | null;
     id: number;
 
     erp_reference: string;
