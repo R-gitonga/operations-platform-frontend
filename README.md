@@ -1,4 +1,19 @@
-# React + TypeScript + Vite
+# Operations Platform frontend
+
+The React client for the Operations Platform. It covers workshop orders, purchase orders, production tracking, paid-order follow-up, branch classification, receiving, notifications, dashboards, and first-administrator setup.
+
+## Local development
+
+```powershell
+npm ci
+npm run dev
+```
+
+Use `npm run build` to produce a production build. The development proxy expects the backend API at `http://localhost:3000` and forwards `/api` requests to it.
+
+The paid-order workflow is available under `/paid-orders`. Paid items support branch ownership and the `MTM` or `Stock-out` reasons; the backend remains the source of truth for classification and receiving rules.
+
+## Template details
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

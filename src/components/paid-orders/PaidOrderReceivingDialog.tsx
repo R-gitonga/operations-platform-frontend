@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { type PaidOrderRow, reasonLabel } from "@/api/paidOrders";
-import { useWso } from "@/hooks/usewso";
+import { useWso } from "@/hooks/useWso";
 import { usePurchaseOrder } from "@/hooks/usePurchaseOrders";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";

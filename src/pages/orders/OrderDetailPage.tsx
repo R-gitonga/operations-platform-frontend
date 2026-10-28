@@ -1,7 +1,7 @@
 import ClassificationCard from "@/components/paid-orders/ClassificationCard";
 import { useParams } from "react-router-dom";
 
-import { useWso } from "@/hooks/usewso";
+import { useWso } from "@/hooks/useWso";
 
 import OrderInformationCard from "@/components/orders/OrderInformationCard";
 import ProductionItemSection from "@/components/orders/ProductionItemSection";
