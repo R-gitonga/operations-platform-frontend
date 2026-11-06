@@ -8,6 +8,7 @@ import UploadAttachment from "./UploadAttachment";
 import EditOrderDialog from "./EditWsoDialog";
 import ReactivateWsoDialog from "./ReactivateWsoDialog";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import { getAttachmentUrl } from "@/lib/api";
 
 interface Props {
   order: WsoDetail;
@@ -84,7 +85,7 @@ export default function OrderInformationCard({ order }: Props) {
           value={
             order.attachment_name ? (
               <a
-                href={`http://localhost:3000/${order.attachment_path}`}
+                href={getAttachmentUrl(order.attachment_path ?? "")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"

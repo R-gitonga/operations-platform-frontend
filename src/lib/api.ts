@@ -3,6 +3,20 @@ import axios from "axios";
 const baseURL =
     import.meta.env.VITE_API_BASE_URL ?? "/api";
 
+export function getAttachmentUrl(path: string): string {
+    if (/^https?:\/\//i.test(path)) {
+        return path;
+    }
+
+    const normalizedPath = `/${path.replace(/^\/+/, "")}`;
+
+    if (/^https?:\/\//i.test(baseURL)) {
+        return `${baseURL.replace(/\/+$/, "")}${normalizedPath}`;
+    }
+
+    return normalizedPath;
+}
+
 export const api = axios.create({
     baseURL,
     withCredentials: true,

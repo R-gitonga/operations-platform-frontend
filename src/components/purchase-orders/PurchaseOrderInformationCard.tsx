@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 
 import type { PurchaseOrderDetail } from "@/types/purchaseOrder";
+import { getAttachmentUrl } from "@/lib/api";
 
 import EditPurchaseOrderDialog from "./EditPurchaseOrderDialog";
 import CancelPurchaseOrderDialog from "./CancelPurchaseOrderDialog";
@@ -86,7 +87,7 @@ export default function PurchaseOrderInformationCard({ order }: Props) {
                     value={
                         order.attachment_name ? (
                             <a
-                                href={`http://localhost:3000/${order.attachment_path}`}
+                                href={getAttachmentUrl(order.attachment_path ?? "")}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:underline"
