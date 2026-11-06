@@ -6,6 +6,7 @@ import {
     SidebarMenuItem,
     SidebarMenuButton,
     SidebarFooter,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import Header from "@/components/layout/Header";
@@ -18,6 +19,7 @@ import { LogOut } from "lucide-react";
 export function AppSidebar() {
     const location = useLocation();
     const { user, logout } = useAuth();
+    const { isMobile, setOpenMobile } = useSidebar();
 
     const handleLogout = async () => {
         try {
@@ -49,6 +51,11 @@ export function AppSidebar() {
                                     <NavLink
                                         to={item.url}
                                         end={item.url === "/"}
+                                        onClick={() => {
+                                            if (isMobile) {
+                                                setOpenMobile(false);
+                                            }
+                                        }}
                                         className={({ isActive: linkIsActive }) => {
                                             const active =
                                                 isActive || linkIsActive;

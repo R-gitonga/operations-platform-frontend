@@ -17,7 +17,7 @@ function DetailRow({
   value: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-[180px_1fr] gap-4 py-2 border-b last:border-b-0">
+    <div className="grid gap-1 border-b py-2 last:border-b-0 sm:grid-cols-[180px_1fr] sm:gap-4">
       <span className="font-medium text-slate-600">{label}</span>
 
       <span>{value || "-"}</span>

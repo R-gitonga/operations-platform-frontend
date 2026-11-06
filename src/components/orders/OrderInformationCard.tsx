@@ -22,7 +22,7 @@ function DetailRow({
   value: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-[180px_1fr] gap-4 py-2 border-b last:border-b-0">
+    <div className="grid gap-1 border-b py-2 last:border-b-0 sm:grid-cols-[180px_1fr] sm:gap-4">
       <span className="font-medium text-slate-600">{label}</span>
 
       <span>{value || "-"}</span>
@@ -39,8 +39,8 @@ export default function OrderInformationCard({ order }: Props) {
     <Card>
       <CardHeader>
         <CardTitle>
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 flex-wrap items-center gap-3">
               <h2 className="text-xl font-semibold">Workshop Order</h2>
 
               {(isCancelled || isCompleted) && (
@@ -48,7 +48,7 @@ export default function OrderInformationCard({ order }: Props) {
               )}
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex w-full flex-wrap gap-2 sm:w-auto sm:justify-end">
               {!isCancelled && !isCompleted && (
                 <>
                   <UploadAttachment wsoId={order.id} />
